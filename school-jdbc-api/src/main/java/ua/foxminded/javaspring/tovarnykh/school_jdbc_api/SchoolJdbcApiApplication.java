@@ -1,13 +1,27 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class SchoolJdbcApiApplication {
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.jdbc.JdbcCourseDao;
 
-	public static void main(String[] args) {
-		SpringApplication.run(SchoolJdbcApiApplication.class, args);
-	}
+@SpringBootApplication
+public class SchoolJdbcApiApplication implements CommandLineRunner {
+
+    public static void main(String[] args) {
+        SpringApplication application = new SpringApplication(SchoolJdbcApiApplication.class);
+
+        application.run(args);
+    }
+
+    @Autowired
+    JdbcCourseDao jdbcCourseDao;
+
+    @Override
+    public void run(String... args) throws Exception {
+        jdbcCourseDao.delete(4);
+    }
 
 }
