@@ -5,7 +5,7 @@ import java.util.List;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Student;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
 
-public interface StudentCourse {
+public interface StudentCourseDao {
     
     List<Student> getStudentsWithCourseName(String courseName) throws DAOException;
 

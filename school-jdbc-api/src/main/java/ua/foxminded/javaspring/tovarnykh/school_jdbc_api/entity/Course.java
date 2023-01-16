@@ -9,6 +9,11 @@ public class Course {
     public Course() {
 
     }
+    
+    public Course(String name) {
+        this.name = name;
+        this.description = "";
+    }
 
     public Course(String name, String description) {
         this.name = name;
