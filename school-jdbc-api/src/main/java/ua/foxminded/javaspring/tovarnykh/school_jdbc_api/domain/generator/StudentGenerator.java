@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Component;
+
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Student;
 
+@Component
 public class StudentGenerator implements Generator<Student> {
 
     private final int STUDENTS_TO_GENERATE = 200;

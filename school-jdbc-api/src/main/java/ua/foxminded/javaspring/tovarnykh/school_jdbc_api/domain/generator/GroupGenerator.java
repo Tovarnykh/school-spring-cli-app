@@ -3,8 +3,11 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Group;
 
+@Component
 public class GroupGenerator implements Generator<Group> {
 
     @Override

@@ -19,11 +19,11 @@ public class JdbcCourseDao implements CourseDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final String PROPERTY_COURSE_ADD = "INSERT INTO courses (course_name, course_description) VALUES (?, ?)";
-    private final String PROPERTY_COURSE_GET_WHERE = "SELECT course_id, course_name, course_description FROM courses WHERE course_id = (?)";
-    private final String PROPERTY_COURSE_GET = "SELECT course_id, course_name, course_description FROM courses";
-    private final String PROPERTY_COURSE_DELETE = "DELETE FROM courses WHERE course_id = (?)";
-    private final String PROPERTY_COURSE_UPDATE = """
+    private static final String PROPERTY_COURSE_ADD = "INSERT INTO courses (course_name, course_description) VALUES (?, ?)";
+    private static final String PROPERTY_COURSE_GET_WHERE = "SELECT course_id, course_name, course_description FROM courses WHERE course_id = (?)";
+    private static final String PROPERTY_COURSE_GET = "SELECT course_id, course_name, course_description FROM courses";
+    private static final String PROPERTY_COURSE_DELETE = "DELETE FROM courses WHERE course_id = (?)";
+    private static final String PROPERTY_COURSE_UPDATE = """
             UPDATE courses
             SET course_name = (?),
             course_description = (?)
@@ -44,7 +44,8 @@ public class JdbcCourseDao implements CourseDao {
         jdbcTemplate.update(PROPERTY_COURSE_ADD, course.getName(), course.getDescription());
     }
 
-    public void add(List<Course> courses) {
+    @Override
+    public void addAll(List<Course> courses) {
         jdbcTemplate.batchUpdate(PROPERTY_COURSE_ADD, new BatchPreparedStatementSetter() {
 
             @Override
@@ -64,12 +65,12 @@ public class JdbcCourseDao implements CourseDao {
     }
 
     @Override
-    public Course getById(int id) throws DAOException {
+    public Course read(int id) throws DAOException {
         return jdbcTemplate.queryForObject(PROPERTY_COURSE_GET_WHERE, rowMapper, id);
     }
 
     @Override
-    public List<Course> getAll() throws DAOException {
+    public List<Course> readAll() throws DAOException {
         return jdbcTemplate.query(PROPERTY_COURSE_GET, rowMapper);
     }
 

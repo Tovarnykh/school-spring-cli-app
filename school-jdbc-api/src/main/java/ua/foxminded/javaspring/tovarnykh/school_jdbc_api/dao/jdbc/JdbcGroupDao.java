@@ -20,11 +20,11 @@ public class JdbcGroupDao implements GroupDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final String PROPERTY_GROUP_ADD = "INSERT INTO groups (group_name) VALUES (?)";
-    private final String PROPERTY_GROUP_DELETE = "DELETE FROM groups WHERE group_id = (?)";
-    private final String PROPERTY_GROUP_GET_WHERE = "SELECT group_id, group_name FROM groups WHERE course_id = (?)";
-    private final String PROPERTY_GROUP_GET = "SELECT group_id, group_name FROM groups";
-    private final String PROPERTY_GROUP_GET_WITH_CONDITION = """
+    private static final String PROPERTY_GROUP_ADD = "INSERT INTO groups (group_name) VALUES (?)";
+    private static final String PROPERTY_GROUP_DELETE = "DELETE FROM groups WHERE group_id = (?)";
+    private static final String PROPERTY_GROUP_GET_WHERE = "SELECT group_id, group_name FROM groups WHERE course_id = (?)";
+    private static final String PROPERTY_GROUP_GET = "SELECT group_id, group_name FROM groups";
+    private static final String PROPERTY_GROUP_GET_WITH_CONDITION = """
             SELECT g.group_name,  COUNT(s.student_id) AS inscribed_students
             FROM students s
             JOIN groups g ON g.group_id = s.group_id
@@ -32,7 +32,7 @@ public class JdbcGroupDao implements GroupDao {
             HAVING COUNT(student_id) <= (?)
             ORDER BY inscribed_students
             """;
-    private final String PROPERTY_GROUP_UPDATE = """
+    private static final String PROPERTY_GROUP_UPDATE = """
             UPDATE groups
             SET group_name = (?)
             WHERE course_id = (?);
@@ -51,7 +51,8 @@ public class JdbcGroupDao implements GroupDao {
         jdbcTemplate.update(PROPERTY_GROUP_ADD, group.getName());
     }
 
-    public void add(List<Group> groups) {
+    @Override
+    public void addAll(List<Group> groups) {
         jdbcTemplate.batchUpdate(PROPERTY_GROUP_ADD, new BatchPreparedStatementSetter() {
 
             @Override
@@ -70,12 +71,12 @@ public class JdbcGroupDao implements GroupDao {
     }
 
     @Override
-    public Group getById(int id) throws DAOException {
+    public Group read(int id) throws DAOException {
         return jdbcTemplate.queryForObject(PROPERTY_GROUP_GET_WHERE, rowMapper, id);
     }
 
     @Override
-    public List<Group> getAll() throws DAOException {
+    public List<Group> readAll() throws DAOException {
         return jdbcTemplate.query(PROPERTY_GROUP_GET, rowMapper);
     }
 

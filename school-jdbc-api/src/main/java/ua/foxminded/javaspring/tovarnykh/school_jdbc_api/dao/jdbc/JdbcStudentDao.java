@@ -20,11 +20,11 @@ public class JdbcStudentDao implements StudentDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final String PROPERTY_STUDENT_ADD = "INSERT INTO students (group_id, first_name, last_name) VALUES (?, ?, ?)";
-    private final String PROPERTY_STUDENT_DELETE = "DELETE FROM students WHERE student_id = (?)";
-    private final String PROPERTY_STUDENT_GET_WHERE = "SELECT student_id, group_id, first_name, last_name FROM students WHERE course_id = (?)";
-    private final String PROPERTY_STUDENT_GET = "SELECT student_id, group_id, first_name, last_name FROM students";
-    private final String PROPERTY_STUDENT_UPDATE = """
+    private static final String PROPERTY_STUDENT_ADD = "INSERT INTO students (group_id, first_name, last_name) VALUES (?, ?, ?)";
+    private static final String PROPERTY_STUDENT_DELETE = "DELETE FROM students WHERE student_id = (?)";
+    private static final String PROPERTY_STUDENT_GET_WHERE = "SELECT student_id, group_id, first_name, last_name FROM students WHERE course_id = (?)";
+    private static final String PROPERTY_STUDENT_GET = "SELECT student_id, group_id, first_name, last_name FROM students";
+    private static final String PROPERTY_STUDENT_UPDATE = """
             UPDATE students
             SET group_id = (?),
             first_name = (?),
@@ -47,7 +47,8 @@ public class JdbcStudentDao implements StudentDao {
         jdbcTemplate.update(PROPERTY_STUDENT_ADD, student.getGroupId(), student.getFirstName(), student.getLastName());
     }
 
-    public void add(List<Student> students) {
+    @Override
+    public void addAll(List<Student> students) {
         jdbcTemplate.batchUpdate(PROPERTY_STUDENT_ADD, new BatchPreparedStatementSetter() {
 
             @Override
@@ -68,12 +69,12 @@ public class JdbcStudentDao implements StudentDao {
     }
 
     @Override
-    public Student getById(int id) throws DAOException {
+    public Student read(int id) throws DAOException {
         return jdbcTemplate.queryForObject(PROPERTY_STUDENT_GET_WHERE, rowMapper, id);
     }
 
     @Override
-    public List<Student> getAll() throws DAOException {
+    public List<Student> readAll() throws DAOException {
         return jdbcTemplate.query(PROPERTY_STUDENT_GET, rowMapper);
     }
 
@@ -84,8 +85,8 @@ public class JdbcStudentDao implements StudentDao {
     }
 
     @Override
-    public void delete(int id) throws DAOException {
-        jdbcTemplate.update(PROPERTY_STUDENT_DELETE, id);
+    public void delete(int studentId) throws DAOException {
+        jdbcTemplate.update(PROPERTY_STUDENT_DELETE, studentId);
     }
 
 }
