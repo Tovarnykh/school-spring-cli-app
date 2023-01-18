@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -40,12 +41,12 @@ public class JdbcCourseDao implements CourseDao {
     };
 
     @Override
-    public void add(Course course) throws DAOException {
+    public void add(Course course) throws DAOException, EmptyResultDataAccessException {
         jdbcTemplate.update(PROPERTY_COURSE_ADD, course.getName(), course.getDescription());
     }
 
     @Override
-    public void addAll(List<Course> courses) {
+    public void addAll(List<Course> courses) throws EmptyResultDataAccessException {
         jdbcTemplate.batchUpdate(PROPERTY_COURSE_ADD, new BatchPreparedStatementSetter() {
 
             @Override
@@ -65,12 +66,12 @@ public class JdbcCourseDao implements CourseDao {
     }
 
     @Override
-    public Course read(int id) throws DAOException {
+    public Course read(int id) throws DAOException, EmptyResultDataAccessException {
         return jdbcTemplate.queryForObject(PROPERTY_COURSE_GET_WHERE, rowMapper, id);
     }
 
     @Override
-    public List<Course> readAll() throws DAOException {
+    public List<Course> readAll() throws DAOException, EmptyResultDataAccessException {
         return jdbcTemplate.query(PROPERTY_COURSE_GET, rowMapper);
     }
 

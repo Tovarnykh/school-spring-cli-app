@@ -13,7 +13,8 @@ CREATE TABLE students
     group_id integer,
     first_name character varying(20) NOT NULL,
     last_name character varying(25) NOT NULL,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id)
+    FOREIGN KEY (group_id) 
+    REFERENCES groups(group_id) ON DELETE SET NULL
 );
 
 DROP TABLE IF EXISTS courses CASCADE;

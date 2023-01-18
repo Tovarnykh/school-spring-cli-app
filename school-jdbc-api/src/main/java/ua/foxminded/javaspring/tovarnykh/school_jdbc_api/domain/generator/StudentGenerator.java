@@ -1,7 +1,9 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.generator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
@@ -11,9 +13,9 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Student;
 @Component
 public class StudentGenerator implements Generator<Student> {
 
-    private final int STUDENTS_TO_GENERATE = 200;
-    private final int MIN_GROUP_SIZE = 10;
-    private final int MAX_GROUP_SIZE = 30;
+    private static final int STUDENTS_TO_GENERATE = 200;
+    private static final int MIN_GROUP_SIZE = 10;
+    private static final int MAX_GROUP_SIZE = 30;
 
     private final List<String> FIRST_NAMES = List.of("Liam", "Olivia", "Noah", "Emma", "Oliver", "Charlotte", "Elijah",
             "Amelia", "James", "Ava", "William", "Sophia", "Benjamin", "Isabella", "Lucas", "Mia", "Henry", "Evelyn",
@@ -27,10 +29,13 @@ public class StudentGenerator implements Generator<Student> {
         List<Student> students = new ArrayList<>();
         int firstNameIndex = 0;
         int lasttNameIndex = 1;
+        Random random = new Random();
 
         for (int i = 0; i < STUDENTS_TO_GENERATE; i++) {
             String[] names = createStudentNames();
             Student student = new Student(names[firstNameIndex], names[lasttNameIndex]);
+            
+            student.setGroupId(random.nextInt(1, 11));
             students.add(student);
         }
         return splitStudentsToGroups(students);
@@ -83,6 +88,12 @@ public class StudentGenerator implements Generator<Student> {
             }
             numberStudents -= numberStudentInGroups[i];
         }
+        
+        if (Arrays.stream(numberStudentInGroups)
+                .anyMatch(groupSize -> groupSize == 0)) {
+            numberStudentInGroups = calculateSizeGroups(numberStudents);
+        }
+        
         return numberStudentInGroups;
     }
 

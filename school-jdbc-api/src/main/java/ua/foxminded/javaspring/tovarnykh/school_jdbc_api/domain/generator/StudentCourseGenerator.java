@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Component;
+
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.StudentCourse;
 
+@Component
 public class StudentCourseGenerator implements Generator<StudentCourse> {
 
     @Override

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,7 +23,7 @@ public class JdbcStudentDao implements StudentDao {
 
     private static final String PROPERTY_STUDENT_ADD = "INSERT INTO students (group_id, first_name, last_name) VALUES (?, ?, ?)";
     private static final String PROPERTY_STUDENT_DELETE = "DELETE FROM students WHERE student_id = (?)";
-    private static final String PROPERTY_STUDENT_GET_WHERE = "SELECT student_id, group_id, first_name, last_name FROM students WHERE course_id = (?)";
+    private static final String PROPERTY_STUDENT_GET_WHERE = "SELECT student_id, group_id, first_name, last_name FROM students WHERE student_id = (?)";
     private static final String PROPERTY_STUDENT_GET = "SELECT student_id, group_id, first_name, last_name FROM students";
     private static final String PROPERTY_STUDENT_UPDATE = """
             UPDATE students
@@ -69,12 +70,12 @@ public class JdbcStudentDao implements StudentDao {
     }
 
     @Override
-    public Student read(int id) throws DAOException {
+    public Student read(int id) throws DAOException, EmptyResultDataAccessException {
         return jdbcTemplate.queryForObject(PROPERTY_STUDENT_GET_WHERE, rowMapper, id);
     }
 
     @Override
-    public List<Student> readAll() throws DAOException {
+    public List<Student> readAll() throws DAOException, EmptyResultDataAccessException {
         return jdbcTemplate.query(PROPERTY_STUDENT_GET, rowMapper);
     }
 

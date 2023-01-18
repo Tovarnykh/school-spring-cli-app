@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,22 +24,18 @@ public class JdbcStudentCourseDao implements StudentCourseDao {
 
     private static final String PROPERTY_STUDENTCOURSE_ADD = "INSERT INTO students_courses(student_id, course_id) VALUES (?,?);";
     private static final String PROPERTY_STUDENTCOURSE_GET = "SELECT student_id, course_id FROM students_courses";
-    private static final String PROPERTY_STUDENTCOURSE_GET_WHERE = """
-            SELECT student_id, course_id FROM students_courses
-            WHERE student_id = (?) AND course_id = (?)
-            """;
     private static final String PROPERTY_STUDENTCOURSE_GET_STUDENTS_BY_COURSE_NAME = """
-            SELECT first_name, last_name
+            SELECT group_id, first_name, last_name
             FROM students_courses sc
             JOIN students s ON s.student_id = sc.student_id
             JOIN courses c ON c.course_id = sc.course_id
             WHERE course_name = (?)
             ORDER BY first_name
-            """;;
+            """;
     private static final String PROPERTY_STUDENTCOURSE_DELETE = """
             DELETE FROM students_courses
             WHERE student_id = (?) AND course_id = (?)
-            """;;
+            """;
 
     private RowMapper<StudentCourse> rowMapper = (rs, rowNum) -> {
         StudentCourse studentCourse = new StudentCourse();
@@ -74,24 +71,19 @@ public class JdbcStudentCourseDao implements StudentCourseDao {
     }
 
     @Override
-    public StudentCourse getById(int studentId, int courseId) {
-        return jdbcTemplate.queryForObject(PROPERTY_STUDENTCOURSE_GET_WHERE, rowMapper, studentId, courseId);
-    }
-
-    @Override
-    public List<StudentCourse> getAll() {
+    public List<StudentCourse> getAll() throws EmptyResultDataAccessException {
         return jdbcTemplate.query(PROPERTY_STUDENTCOURSE_GET, rowMapper);
     }
 
     @Override
-    public List<Student> getStudents(String courseName) throws DAOException {
+    public List<Student> getStudents(String courseName) throws DAOException, EmptyResultDataAccessException {
         return jdbcTemplate.query(PROPERTY_STUDENTCOURSE_GET_STUDENTS_BY_COURSE_NAME, (rs, rowNum) -> {
             Student student = new Student();
-
+            student.setGroupId(rs.getInt("group_id"));
             student.setFirstName(rs.getString("first_name"));
             student.setLastName(rs.getString("last_name"));
             return student;
-        });
+        }, courseName);
     }
 
     @Override

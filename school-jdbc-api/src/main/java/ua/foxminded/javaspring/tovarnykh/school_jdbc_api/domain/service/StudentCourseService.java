@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.StudentCourseDao;
@@ -40,24 +41,15 @@ public class StudentCourseService {
     public void enrollStudent(int studentId, int courseId) {
         try {
             studentCourseDao.add(studentId, courseId);
-        } catch (DAOException e) {
+        } catch (Exception e) {
             System.out.println(MESSAGE_GET_EXCEPTION);
-        }
-    }
-
-    public StudentCourse get(int studentId, int courseId) {
-        try {
-            return studentCourseDao.getById(studentId, courseId);
-        } catch (DAOException e) {
-            System.out.println(MESSAGE_GET_EXCEPTION);
-            return new StudentCourse();
         }
     }
 
     public List<Student> getStudentsByCourseName(String courseName) {
         try {
             return studentCourseDao.getStudents(courseName);
-        } catch (DAOException e) {
+        } catch (DAOException | EmptyResultDataAccessException e) {
             System.out.println(MESSAGE_GET_EXCEPTION);
             return List.of();
         }

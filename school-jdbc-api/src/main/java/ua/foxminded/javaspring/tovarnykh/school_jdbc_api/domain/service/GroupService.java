@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.GroupDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.generator.Generator;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Group;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
 
+@Component
 public class GroupService {
 
     @Autowired
@@ -20,6 +23,7 @@ public class GroupService {
     private Generator<Group> generator;
 
     private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving group";
+    private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding group";
 
     public void generateData() {
         try {
@@ -37,15 +41,15 @@ public class GroupService {
     public void add(String name) {
         try {
             groupDao.add(new Group(name));
-        } catch (DAOException e) {
-            System.out.println(MESSAGE_GET_EXCEPTION);
+        } catch (Exception e) {
+            System.out.println(MESSAGE_ADD_EXCEPTION);
         }
     }
 
     public Group get(int groupId) {
         try {
             return groupDao.read(groupId);
-        } catch (DAOException e) {
+        } catch (DAOException | EmptyResultDataAccessException e) {
             System.out.println(MESSAGE_GET_EXCEPTION);
             return new Group();
         }
@@ -54,7 +58,7 @@ public class GroupService {
     public void update(int groupId, String name) {
         try {
             groupDao.update(new Group(groupId, name));
-        } catch (DAOException e) {
+        } catch (Exception e) {
             System.out.println(MESSAGE_GET_EXCEPTION);
         }
     }
@@ -62,13 +66,18 @@ public class GroupService {
     public void delete(int groupId) {
         try {
             groupDao.delete(groupId);
-        } catch (DAOException e) {
+        } catch (DAOException | EmptyResultDataAccessException e) {
             System.out.println(MESSAGE_GET_EXCEPTION);
         }
     }
 
-    public List<Group> getGroupsWithLessStudents(int numberOfStudents) throws DAOException {
-        return groupDao.getGroupsWithLessEqualsStudentCount(numberOfStudents);
+    public List<Group> getGroupsWithLessStudents(int numberOfStudents) {
+        try {
+            return groupDao.getGroupsWithLessEqualsStudentCount(numberOfStudents);
+        } catch (DAOException | EmptyResultDataAccessException e) {
+            System.out.println(MESSAGE_GET_EXCEPTION);
+            return List.of();
+        }
     }
 
 }

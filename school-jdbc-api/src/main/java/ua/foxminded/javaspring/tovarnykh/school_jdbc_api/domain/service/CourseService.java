@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.CourseDao;
@@ -22,6 +23,7 @@ public class CourseService {
     private Generator<Course> generator;
 
     private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving courses";
+    private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding courses";
 
     public void generateData() {
         try {
@@ -39,15 +41,15 @@ public class CourseService {
     public void add(String name, String description) {
         try {
             courseDao.add(new Course(name, description));
-        } catch (DAOException e) {
-            System.out.println(MESSAGE_GET_EXCEPTION);
+        } catch (Exception e) {
+            System.out.println(MESSAGE_ADD_EXCEPTION);
         }
     }
 
     public Course get(int courseId) {
         try {
             return courseDao.read(courseId);
-        } catch (DAOException e) {
+        } catch (DAOException | EmptyResultDataAccessException e) {
             System.out.println(MESSAGE_GET_EXCEPTION);
             return new Course();
         }

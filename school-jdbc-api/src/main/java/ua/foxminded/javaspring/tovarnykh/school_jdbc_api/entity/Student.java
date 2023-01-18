@@ -20,8 +20,8 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public Student(int id, String firstName, String lastName) {
-        this.id = id;
+    public Student(int groupId, String firstName, String lastName) {
+        this.groupId = groupId;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -97,8 +97,9 @@ public class Student {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
-        if (id != other.id)
+        if (id != other.id) {
             return false;
+        }
         return true;
     }
 

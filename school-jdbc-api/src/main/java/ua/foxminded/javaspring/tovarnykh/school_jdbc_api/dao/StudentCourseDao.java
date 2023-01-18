@@ -8,11 +8,9 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
 
 public interface StudentCourseDao{
     
-    public void add(int student_id, int course_id) throws DAOException;
+    public void add(int studentId, int courseId) throws DAOException;
 
     public void addAll(List<StudentCourse> studentCourses) throws DAOException;
-
-    public StudentCourse getById(int studentId, int courseId) throws DAOException;
 
     public List<StudentCourse> getAll() throws DAOException;
 
