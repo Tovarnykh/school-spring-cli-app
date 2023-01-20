@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.StudentCourseDao;
@@ -23,7 +22,12 @@ public class JdbcStudentCourseDao implements StudentCourseDao {
     private JdbcTemplate jdbcTemplate;
 
     private static final String PROPERTY_STUDENTCOURSE_ADD = "INSERT INTO students_courses(student_id, course_id) VALUES (?,?);";
-    private static final String PROPERTY_STUDENTCOURSE_GET = "SELECT student_id, course_id FROM students_courses";
+    private static final String PROPERTY_STUDENTCOURSE_GET_ALL = """
+            SELECT CONCAT(first_name, ' ' , last_name) AS full_name, course_name
+            FROM students_courses sc
+            JOIN students s  ON s.student_id = sc.student_id
+            JOIN courses c ON c.course_id = sc.course_id
+            """;
     private static final String PROPERTY_STUDENTCOURSE_GET_STUDENTS_BY_COURSE_NAME = """
             SELECT group_id, first_name, last_name
             FROM students_courses sc
@@ -36,14 +40,6 @@ public class JdbcStudentCourseDao implements StudentCourseDao {
             DELETE FROM students_courses
             WHERE student_id = (?) AND course_id = (?)
             """;
-
-    private RowMapper<StudentCourse> rowMapper = (rs, rowNum) -> {
-        StudentCourse studentCourse = new StudentCourse();
-
-        studentCourse.setStudentId(rs.getInt("student_id"));
-        studentCourse.setCourseID(rs.getInt("course_id"));
-        return studentCourse;
-    };
 
     @Override
     public void add(int studentId, int courseId) {
@@ -71,8 +67,14 @@ public class JdbcStudentCourseDao implements StudentCourseDao {
     }
 
     @Override
-    public List<StudentCourse> getAll() throws EmptyResultDataAccessException {
-        return jdbcTemplate.query(PROPERTY_STUDENTCOURSE_GET, rowMapper);
+    public List<StudentCourse> readAll() throws EmptyResultDataAccessException {
+        return jdbcTemplate.query(PROPERTY_STUDENTCOURSE_GET_ALL, (rs, rowNum) -> {
+            StudentCourse studentCourse = new StudentCourse();
+
+            studentCourse.setStudentFullName(rs.getString("full_name"));
+            studentCourse.setCourseName(rs.getString("course_name"));
+            return studentCourse;
+        });
     }
 
     @Override

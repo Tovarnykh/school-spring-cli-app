@@ -6,6 +6,8 @@ public class StudentCourse {
     
     private int studentId;
     private int courseID;
+    private String studentFullName;
+    private String courseName;
 
     public StudentCourse() {
 
@@ -31,6 +33,22 @@ public class StudentCourse {
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
+    }
+
+    public String getStudentFullName() {
+        return studentFullName;
+    }
+
+    public void setStudentFullName(String studentFullName) {
+        this.studentFullName = studentFullName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     @Override
