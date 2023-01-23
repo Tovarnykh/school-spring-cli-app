@@ -16,13 +16,13 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
 @Service
 public class StudentService {
 
-    private static final String MESSAGE_POPULATE_EXCEPTION = "Error: Problem with populating students";
+    private static final String MESSAGE_POPULATE_EXCEPTION = "Error: Problem with populating students,"
+            + " try to populate groups first";
     private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving student";
     private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding studet";
     private static final String MESSAGE_UPDATE_EXCEPTION = "Error: Problem with updating student";
     private static final String MESSAGE_DELETE_EXCEPTION = "Error: Problem with deleting student";
-    private static final String MESSAGE_TABLE_NOT_EMPTY = "Can`t generate data, table is not empty";
-
+    
     @Autowired
     private StudentDao studentDao;
 
@@ -32,13 +32,9 @@ public class StudentService {
 
     public void generateData() {
         try {
-            if (studentDao.readAll().isEmpty()) {
                 List<Student> students = generator.generate();
                 studentDao.addAll(students);
-            } else {
-                System.out.println(MESSAGE_TABLE_NOT_EMPTY);
-            }
-        } catch (DAOException e) {
+        } catch (DAOException | DataIntegrityViolationException e) {
             System.out.println(MESSAGE_POPULATE_EXCEPTION);
         }
     }
@@ -57,6 +53,15 @@ public class StudentService {
         } catch (DAOException | EmptyResultDataAccessException e) {
             System.out.println(MESSAGE_GET_EXCEPTION);
             return new Student();
+        }
+    }
+    
+    public List<Student> getAll() {
+        try {
+            return studentDao.readAll();
+        } catch (DAOException | EmptyResultDataAccessException e) {
+            System.out.println(MESSAGE_GET_EXCEPTION);
+            return List.of();
         }
     }
 

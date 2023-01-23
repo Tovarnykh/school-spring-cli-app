@@ -21,7 +21,7 @@ public class SchoolJdbcApiApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println();
+        
         consoleMenu.initMenu();
     }
 

@@ -24,20 +24,15 @@ public class StudentCourseService {
     @Qualifier("studentCourseGenerator")
     private Generator<StudentCourse> generator;
 
-    private static final String MESSAGE_POPULATE_EXCEPTION = "Error: Problem with populating courses";
-    private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving course";
-    private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding course";
-    private static final String MESSAGE_DELETE_EXCEPTION = "Error: Problem with deleting course";
-    private static final String MESSAGE_TABLE_NOT_EMPTY = "Can`t generate data, table is not empty";
+    private static final String MESSAGE_POPULATE_EXCEPTION = "Error: Problem with populating student-courses";
+    private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving student-course";
+    private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding student-course";
+    private static final String MESSAGE_DELETE_EXCEPTION = "Error: Problem with deleting student-course";
 
     public void generateData() {
         try {
-            if (studentCourseDao.readAll().isEmpty()) {
                 List<StudentCourse> studentCourse = generator.generate();
                 studentCourseDao.addAll(studentCourse);
-            } else {
-                System.out.println(MESSAGE_TABLE_NOT_EMPTY);
-            }
         } catch (DAOException | DataIntegrityViolationException e) {
             System.out.println(MESSAGE_POPULATE_EXCEPTION);
         }

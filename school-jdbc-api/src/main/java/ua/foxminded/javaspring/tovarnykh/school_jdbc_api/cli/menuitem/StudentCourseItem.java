@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.CommandLineInterface;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.CourseService;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.StudentCourseService;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Course;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Student;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.StudentCourse;
 
 @Component
 public class StudentCourseItem extends CommandLineInterface implements Item {
@@ -17,9 +20,9 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
             ║ Choose command                          ║
             ╠─────────────────────────────────────────╣
             ║                                         ║
-            ║   1 - Auto enroll students to courses   ║
+            ║   1 - Enroll Student to Course          ║
             ║                                         ║
-            ║   2 - Enroll Student to Course          ║
+            ║   2 - Print all enrolled students       ║
             ║                                         ║
             ║   3 - Get Students By Course Name       ║
             ║                                         ║
@@ -29,9 +32,18 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
             ║                                         ║
             ╚═════════════════════════════════════════╝
             """;
+    private static final String STUDENTS_HEAD_SECTION = """
+            ╔════════════════════════════════════════╗
+            ║                 Students               ║
+            ╟────────────────────────────────────────╢
+            """;
+    private static final String STUDENT_COURSE_FORMAT = " %-19s | %5s %n";
 
     @Autowired
     private StudentCourseService studentCourseService;
+    
+    @Autowired
+    private CourseService courseService;
 
     @Override
     public void draw() {
@@ -39,9 +51,9 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
         int choice = readNumber();
 
         if (choice == 1) {
-            studentCourseService.generateData();
-        } else if (choice == 2) {
             enrollSection();
+        } else if (choice == 2) {
+            getAllEnrolledStudents();
         } else if (choice == 3) {
             getStudentsByCourseName();
         } else if (choice == 4) {
@@ -57,25 +69,39 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
         studentCourseService.enrollStudent(studentId, courseId);
     }
 
+    private void getAllEnrolledStudents() {
+        System.out.println(STUDENTS_HEAD_SECTION);
+        List<StudentCourse> studentCourses = studentCourseService.getAllEnrolledStudents();
+        
+        System.out.printf(STUDENT_COURSE_FORMAT, "Full Name", "Group Name");
+        System.out.println(DELIMITER);
+        if (!studentCourses.isEmpty()) {
+            studentCourses.forEach(entrolledStudent -> System.out.printf(STUDENT_COURSE_FORMAT, 
+                    entrolledStudent.getStudentFullName(),
+                    entrolledStudent.getCourseName()));
+        }
+        closeSection();
+    }
+
     private void getStudentsByCourseName() {
-        System.out.println("Please, enter course name:");
+        System.out.println("Please, select course from folowing:");
+        List<Course> courses = courseService.getAll();
+        
+        courses.forEach(course -> {
+            System.out.println(course.getName());
+        });
+        
         String courseName = readLine();
 
-        System.out.print("""
-                ╔════════════════════════════════════════╗
-                ║                 Students               ║
-                ╟────────────────────────────────────────╢
-                 in:
-                 """);
+        System.out.print(STUDENTS_HEAD_SECTION);
         List<Student> students = studentCourseService.getStudentsByCourseName(courseName);
-        
-        System.out.printf(" %14s | %s %n", "groupId", "Full Name");
+
+        System.out.printf(STUDENT_COURSE_FORMAT, "groupId", "Full Name");
         System.out.println(DELIMITER);
         if (!students.isEmpty()) {
-            students.forEach(student -> System.out.printf(" %14d | %s %s %n", 
+            students.forEach(student -> System.out.printf(STUDENT_COURSE_FORMAT, 
                     student.getGroupId(),
-                    student.getFirstName(), 
-                    student.getLastName()));
+                    student.getFirstName(), student.getLastName()));
         }
         closeSection();
     }

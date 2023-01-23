@@ -21,7 +21,6 @@ public class GroupService {
     private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding group";
     private static final String MESSAGE_UPDATE_EXCEPTION = "Error: Problem with updating group";
     private static final String MESSAGE_DELETE_EXCEPTION = "Error: Problem with deleting group";
-    private static final String MESSAGE_TABLE_NOT_EMPTY = "Can`t generate data, table is not empty";
 
     @Autowired
     private GroupDao groupDao;
@@ -32,12 +31,8 @@ public class GroupService {
 
     public void generateData() {
         try {
-            if (groupDao.readAll().isEmpty()) {
                 List<Group> students = generator.generate();
                 groupDao.addAll(students);
-            } else {
-                System.out.println(MESSAGE_TABLE_NOT_EMPTY);
-            }
         } catch (DAOException | DataIntegrityViolationException e) {
             System.out.println(MESSAGE_POPULATE_EXCEPTION);
         }
@@ -60,7 +55,7 @@ public class GroupService {
         }
     }
 
-    public List<Group> getAll(int groupId) {
+    public List<Group> getAll() {
         try {
             return groupDao.readAll();
         } catch (DAOException | EmptyResultDataAccessException e) {

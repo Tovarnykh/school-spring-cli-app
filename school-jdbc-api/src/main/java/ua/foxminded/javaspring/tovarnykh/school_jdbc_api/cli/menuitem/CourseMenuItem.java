@@ -1,5 +1,7 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +17,11 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
             ║ Choose command                          ║
             ╠─────────────────────────────────────────╣
             ║                                         ║
-            ║   1 - Populate Course Table with        ║
-            ║       random data                       ║
+            ║   1 - Add new Course to Table           ║
             ║                                         ║
-            ║   2 - Add new Course to Table           ║
+            ║   2 - Get Course                        ║
             ║                                         ║
-            ║   3 - Get Course                        ║
+            ║   3 - Get All Courses                   ║
             ║                                         ║
             ║   4 - Update Course                     ║
             ║                                         ║
@@ -30,6 +31,7 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
             ║                                         ║
             ╚═════════════════════════════════════════╝
             """;
+    private static final String COURSE_FORMAT = " %12s | %s %n";
 
     @Autowired
     private CourseService courseService;
@@ -40,11 +42,11 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         int choice = readNumber();
 
         if (choice == 1) {
-            courseService.generateData();
-        } else if (choice == 2) {
             addSection();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             getSection();
+        } else if (choice == 3) {
+            getAllSection();
         } else if (choice == 4) {
             updateSection();
         } else if (choice == 5) {
@@ -73,10 +75,28 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         Course course = courseService.get(courseId);
 
         if (course.getId() != 0) {
-            System.out.printf(" %18s | %s %n", "Id", "Name");
+            System.out.printf(COURSE_FORMAT, "Id", "Name");
             System.out.println(DELIMITER);
-            System.out.printf(" %18d | %s %n", course.getId(), course.getName());
+            System.out.printf(COURSE_FORMAT, course.getId(), course.getName());
         }
+        closeSection();
+    }
+
+    private void getAllSection() {
+        System.out.print("""
+                ╔════════════════════════════════════════╗
+                ║                Courses                 ║
+                ╟────────────────────────────────────────╢
+                 """);
+        System.out.printf(COURSE_FORMAT, "Id", "Name");
+        System.out.println(DELIMITER);
+
+        List<Course> courses = courseService.getAll();
+
+        courses.forEach(course -> {
+            System.out.printf(COURSE_FORMAT, course.getId(), course.getName());
+        });
+
         closeSection();
     }
 

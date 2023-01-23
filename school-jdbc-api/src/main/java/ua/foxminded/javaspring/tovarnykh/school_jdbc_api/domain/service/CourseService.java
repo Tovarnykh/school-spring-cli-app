@@ -21,7 +21,6 @@ public class CourseService {
     private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding course";
     private static final String MESSAGE_UPDATE_EXCEPTION = "Error: Problem with updating course";
     private static final String MESSAGE_DELETE_EXCEPTION = "Error: Problem with deleting course";
-    private static final String MESSAGE_TABLE_NOT_EMPTY = "Can`t generate data, table is not empty";
 
     @Autowired
     private CourseDao courseDao;
@@ -32,12 +31,8 @@ public class CourseService {
 
     public void generateData() {
         try {
-            if (courseDao.readAll().isEmpty()) {
                 List<Course> courses = generator.generate();
                 courseDao.addAll(courses);
-            } else {
-                System.out.println(MESSAGE_TABLE_NOT_EMPTY);
-            }
         } catch (DAOException | DataIntegrityViolationException e) {
             System.out.println(MESSAGE_POPULATE_EXCEPTION);
         }

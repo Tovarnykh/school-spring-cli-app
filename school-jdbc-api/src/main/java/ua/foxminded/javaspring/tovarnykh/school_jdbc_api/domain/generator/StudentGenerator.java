@@ -34,7 +34,7 @@ public class StudentGenerator implements Generator<Student> {
         for (int i = 0; i < STUDENTS_TO_GENERATE; i++) {
             String[] names = createStudentNames();
             Student student = new Student(names[firstNameIndex], names[lasttNameIndex]);
-            
+
             student.setGroupId(random.nextInt(1, 11));
             students.add(student);
         }
@@ -46,10 +46,8 @@ public class StudentGenerator implements Generator<Student> {
         int firstNameIndex = 0;
         int lasttNameIndex = 1;
 
-        studentFullNames[firstNameIndex] = FIRST_NAMES.get(getRandom()
-                .nextInt(FIRST_NAMES.size()));
-        studentFullNames[lasttNameIndex] = LAST_NAMES.get(getRandom()
-                .nextInt(LAST_NAMES.size()));
+        studentFullNames[firstNameIndex] = FIRST_NAMES.get(getRandom().nextInt(FIRST_NAMES.size()));
+        studentFullNames[lasttNameIndex] = LAST_NAMES.get(getRandom().nextInt(LAST_NAMES.size()));
 
         return studentFullNames;
     }
@@ -73,27 +71,26 @@ public class StudentGenerator implements Generator<Student> {
 
     private int[] calculateSizeGroups(int numberStudents) {
         int[] numberStudentInGroups = new int[10];
-        List<Integer> variantSizes = Stream
-                .iterate(0, n -> n + 1)
-                .limit(MAX_GROUP_SIZE)
-                .filter(n -> n == 0 || n > MIN_GROUP_SIZE)
-                .toList();
-        for (int i = 0; i < numberStudentInGroups.length; i++) {
-            if (numberStudents > 10) {
-                numberStudentInGroups[i] = variantSizes
-                        .get(getRandom()
-                                .nextInt(variantSizes.size()));
-            } else {
-                numberStudentInGroups[i] = 0;
+
+        do {
+            List<Integer> variantSizes = Stream.iterate(0, n -> n + 1)
+                    .limit(MAX_GROUP_SIZE)
+                    .filter(n -> n == 0 || n > MIN_GROUP_SIZE)
+                    .toList();
+            for (int i = 0; i < numberStudentInGroups.length; i++) {
+                if (numberStudents > 10) {
+                    numberStudentInGroups[i] = variantSizes
+                            .get(getRandom()
+                                    .nextInt(variantSizes
+                                    .size()));
+                } else {
+                    numberStudentInGroups[i] = 0;
+                }
+                numberStudents -= numberStudentInGroups[i];
             }
-            numberStudents -= numberStudentInGroups[i];
-        }
-        
-        if (Arrays.stream(numberStudentInGroups)
-                .anyMatch(groupSize -> groupSize == 0)) {
-            numberStudentInGroups = calculateSizeGroups(numberStudents);
-        }
-        
+        } while (Arrays.stream(numberStudentInGroups)
+                .noneMatch(groupSize -> groupSize == 0));
+
         return numberStudentInGroups;
     }
 

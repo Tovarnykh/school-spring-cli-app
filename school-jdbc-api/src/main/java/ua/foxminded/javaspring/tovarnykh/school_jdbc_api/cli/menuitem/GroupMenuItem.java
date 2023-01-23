@@ -17,18 +17,15 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
             ║ Choose command                          ║
             ╠─────────────────────────────────────────╣
             ║                                         ║
-            ║   1 - Populate Group Table with         ║
-            ║       random data                       ║
+            ║   1 - Add new Group to Table            ║
             ║                                         ║
-            ║   2 - Add new Group to Table            ║
+            ║   2 - Get Group                         ║
             ║                                         ║
-            ║   3 - Get Group                         ║
+            ║   3 - Update Group                      ║
             ║                                         ║
-            ║   4 - Update Group                      ║
+            ║   4 - Delete Group                      ║
             ║                                         ║
-            ║   5 - Delete Group                      ║
-            ║                                         ║
-            ║   6 - Get Groups with less              ║
+            ║   5 - Get Groups with less              ║
             ║       or equals Students                ║
             ║                                         ║
             ║   other number - to went Back           ║
@@ -45,16 +42,14 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
         int choice = readNumber();
 
         if (choice == 1) {
-            groupService.generateData();
-        } else if (choice == 2) {
             addSection();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             getSection();
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             updateSection();
-        } else if (choice == 5) {
+        } else if (choice == 4) {
             deleteSection();
-        } else if (choice == 6) {
+        } else if (choice == 5) {
             getGroups();
         }
     }
@@ -114,10 +109,10 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
         
         List<Group> groups = groupService.getGroupsWithLessStudents(numberOfStudents);
         
-        System.out.printf(" %15s |  %s | %s %n", "id", "name", "inscribed");
+        System.out.printf(" %12s |  %s | %s %n", "id", "name", "inscribed");
         System.out.println();
         if (!groups.isEmpty()) {
-            groups.forEach(group -> System.out.printf(" %15d | %s | %s %n", 
+            groups.forEach(group -> System.out.printf(" %12d | %s | %s %n", 
                     group.getId(), 
                     group.getName(),
                     group.getInscribedStudents()));
