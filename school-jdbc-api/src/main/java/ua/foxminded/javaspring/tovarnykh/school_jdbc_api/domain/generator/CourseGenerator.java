@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Course;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
 
 @Component
 public class CourseGenerator implements Generator<Course> {

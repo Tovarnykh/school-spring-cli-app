@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Group;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
 
 @Component
 public class GroupGenerator implements Generator<Group> {

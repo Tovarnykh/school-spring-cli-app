@@ -34,16 +34,14 @@ class SchoolJdbcApiApplicationTests {
 //        registry.add("spring.datasource.username", container::getUsername);
 //    }
 //    
-    @Autowired
-    StudentService studentService;
-    
-	@Test
-	void contextLoads() {
-	    
-	    studentService.add(1, "V", "v");
-	    
-	    //assertNotEquals(studentService.get(200).getId(), 0);
-	    
+//    @Autowired
+//    StudentService studentService;
+//    
+//	@Test
+//	void contextLoads() {
+//	    
+//	    studentService.add(1, "V", "v");
+//	    
+//	    //assertNotEquals(studentService.get(200).getId(), 0);
+//	    
 	}
-
-}

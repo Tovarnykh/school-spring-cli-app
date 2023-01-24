@@ -1,13 +1,11 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.CommandLineInterface;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.CourseService;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Course;
 
 @Component
 public class CourseMenuItem extends CommandLineInterface implements Item {
@@ -33,8 +31,14 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
             """;
     private static final String COURSE_FORMAT = " %12s | %s %n";
 
-    @Autowired
+    private final String itemName;
+
     private CourseService courseService;
+
+    public CourseMenuItem(CourseService courseService) {
+        this.courseService = courseService;
+        itemName = "Course";
+    }
 
     @Override
     public void draw() {
@@ -52,6 +56,11 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         } else if (choice == 5) {
             deleteSection();
         }
+    }
+
+    @Override
+    public String getName() {
+        return String.valueOf(itemName);
     }
 
     private void addSection() {

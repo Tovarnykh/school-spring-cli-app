@@ -5,20 +5,19 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Student;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.StudentCourse;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.StudentCourse;
 
-public interface StudentCourseDao{
-    
-    public void add(int studentId, int courseId) throws DAOException, DataIntegrityViolationException;
+public interface StudentCourseDao {
 
-    public void addAll(List<StudentCourse> studentCourses) throws DAOException, DataIntegrityViolationException;
+    void add(int studentId, int courseId) throws DataIntegrityViolationException;
 
-    public List<StudentCourse> readAll() throws DAOException, EmptyResultDataAccessException;
+    void addAll(List<StudentCourse> studentCourses) throws DataIntegrityViolationException;
 
-    List<Student> getStudents(String courseName) throws DAOException, EmptyResultDataAccessException;
+    List<StudentCourse> readAll() throws EmptyResultDataAccessException;
 
-    void delete(int studentId, int courseId) throws DAOException;
+    List<Student> getStudents(String courseName) throws EmptyResultDataAccessException;
+
+    void delete(int studentId, int courseId);
 
 }

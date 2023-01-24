@@ -5,20 +5,18 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
-
 public interface Dao<T> {
 
-    void add(T entity) throws DAOException, DataIntegrityViolationException;
+    void add(T entity) throws DataIntegrityViolationException;
     
-    void addAll(List <T> entity) throws DAOException, DataIntegrityViolationException;
+    void addAll(List <T> entity) throws DataIntegrityViolationException;
 
-    T read(int id) throws DAOException, EmptyResultDataAccessException;
+    T read(int id) throws EmptyResultDataAccessException;
 
-    List<T> readAll() throws DAOException, EmptyResultDataAccessException;
+    List<T> readAll() throws EmptyResultDataAccessException;
 
-    void update(T entity) throws DAOException, DataIntegrityViolationException;
+    void update(T entity) throws DataIntegrityViolationException;
 
-    void delete(int id) throws DAOException;
+    void delete(int id);
 
 }

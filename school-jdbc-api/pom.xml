@@ -10,7 +10,6 @@
     </parent>
     <groupId>ua.foxminded.javaspring.tovarnykh</groupId>
     <artifactId>school-jdbc-api</artifactId>
-    <version>0.0.1</version>
     <name>SchoolJDBCApi</name>
     <description>Demo project for Spring Boot</description>
     <properties>

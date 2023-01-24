@@ -1,109 +1,83 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.CourseMenuItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.GroupMenuItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.StudentCourseItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.StudentMenuItem;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.CourseService;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.GroupService;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.StudentCourseService;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.StudentService;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.Item;
 
 @Component
 public class Menu extends CommandLineInterface {
 
     private static final String EXIT = "exit";
-    private static final String MAIN_MENU = """
+    private static final String MAIN_MENU_HEAD_SECTION = """
             ╔═════════════════════════════════════════╗
             ║ Welcome To School Console Application!  ║
             ║       Choose which Item to Interact     ║
-            ╠─────────────────────────────────────────╣
-            ║                                         ║
-            ║   1 - Groups Table                      ║
-            ║                                         ║
-            ║   2 - Students Table                    ║
-            ║                                         ║
-            ║   3 - Courses Table                     ║
-            ║                                         ║
-            ║   4 - Students-Courses Table            ║
-            ║                                         ║
-            ║   exit - to Exit                        ║
-            ║                                         ║
-            ╚═════════════════════════════════════════╝
-            """;
+            ╠─────────────────────────────────────────╣""";
+    private static final String MENU_FORMAT = "║%5s - %-33s║%n";
+    private static final String EXCEPTION_MESSAGE = "Such command not provided, try agan";
 
-    @Autowired
     private StudentMenuItem studentMenuItem;
-
-    @Autowired
     private CourseMenuItem courseMenuItem;
-
-    @Autowired
     private GroupMenuItem groupMenuItem;
-
-    @Autowired
     private StudentCourseItem studentCourseItem;
+    
+    private Map<Integer, Item> menuItems;
 
-    @Autowired
-    private GroupService groupService;
-
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private CourseService courseService;
-
-    @Autowired
-    private StudentCourseService studentCourseService;
+    public Menu(StudentMenuItem studentMenuItem,
+            CourseMenuItem courseMenuItem, GroupMenuItem groupMenuItem,
+            StudentCourseItem studentCourseItem) {
+        this.studentMenuItem = studentMenuItem;
+        this.courseMenuItem = courseMenuItem;
+        this.groupMenuItem = groupMenuItem;
+        this.studentCourseItem = studentCourseItem;
+        this.menuItems = new LinkedHashMap<>();
+        populateMenuItems();
+    }
 
     public void initMenu() {
-        populateDatabase();
-
         String choice = "";
 
         do {
-            System.out.println(MAIN_MENU);
+            printMenu();
             try {
                 choice = readLine();
                 if ((choice.chars().allMatch(Character::isDigit)) && (!choice.isEmpty())) {
                     int option = Integer.parseInt(choice);
 
-                    if (option == 1) {
-                        groupMenuItem.draw();
-                    } else if (option == 2) {
-                        studentMenuItem.draw();
-                    } else if (option == 3) {
-                        courseMenuItem.draw();
-                    } else if (option == 4) {
-                        studentCourseItem.draw();
-                    }
+                    menuItems.get(option).draw();
                 } else if (EXIT.equalsIgnoreCase(choice)) {
                     break;
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Bad input");
+            } catch (NumberFormatException | NullPointerException e) {
+                System.out.println(EXCEPTION_MESSAGE);
             }
         } while (!EXIT.equalsIgnoreCase(choice));
 
         scanner.close();
     }
 
-    private void populateDatabase() {
-        if (groupService.getAll().isEmpty()) {
-            groupService.generateData();
-        }
-        if (studentService.getAll().isEmpty()) {
-            studentService.generateData();
-        }
-        if (courseService.getAll().isEmpty()) {
-            courseService.generateData();
-        }
-        if (studentCourseService.getAllEnrolledStudents().isEmpty()) {
-            studentCourseService.generateData();
-        }
+    private void populateMenuItems() {
+        menuItems.put(1, groupMenuItem);
+        menuItems.put(2, studentMenuItem);
+        menuItems.put(3, courseMenuItem);
+        menuItems.put(4, studentCourseItem);
+    }
+
+    private void printMenu() {
+        System.out.println(MAIN_MENU_HEAD_SECTION);
+
+        menuItems.forEach((index, menuItem) -> {
+            System.out.printf(MENU_FORMAT, index, menuItem.getName() + "Table");
+        });
+        System.out.printf(MENU_FORMAT, EXIT, "to Exit");
+        System.out.println(MENU_CLOSE_SECTION);
     }
 
 }

@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity;
+package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity;
 
 public class Student {
 

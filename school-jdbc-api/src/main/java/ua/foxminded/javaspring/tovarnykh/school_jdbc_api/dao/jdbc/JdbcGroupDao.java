@@ -4,22 +4,17 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.GroupDao;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Group;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.rawmapper.GroupRowMapper;
 
 @Repository
 public class JdbcGroupDao implements GroupDao {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     private static final String PROPERTY_GROUP_ADD = "INSERT INTO groups (group_name) VALUES (?)";
     private static final String PROPERTY_GROUP_DELETE = "DELETE FROM groups WHERE group_id = (?)";
@@ -39,16 +34,14 @@ public class JdbcGroupDao implements GroupDao {
             WHERE group_id = (?);
             """;
 
-    private RowMapper<Group> rowMapper = (rs, rowNum) -> {
-        Group group = new Group();
+    private JdbcTemplate jdbcTemplate;
 
-        group.setId(rs.getInt("group_id"));
-        group.setName(rs.getString("group_name"));
-        return group;
-    };
+    public JdbcGroupDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
-    public void add(Group group) throws DAOException {
+    public void add(Group group) {
         jdbcTemplate.update(PROPERTY_GROUP_ADD, group.getName());
     }
 
@@ -72,34 +65,29 @@ public class JdbcGroupDao implements GroupDao {
     }
 
     @Override
-    public Group read(int id) throws DAOException, EmptyResultDataAccessException {
-        return jdbcTemplate.queryForObject(PROPERTY_GROUP_GET_WHERE, rowMapper, id);
+    public Group read(int id) throws EmptyResultDataAccessException {
+        return jdbcTemplate.queryForObject(PROPERTY_GROUP_GET_WHERE, GroupRowMapper.allTableColumns, id);
     }
 
     @Override
-    public List<Group> readAll() throws DAOException, EmptyResultDataAccessException {
-        return jdbcTemplate.query(PROPERTY_GROUP_GET, rowMapper);
+    public List<Group> readAll() throws EmptyResultDataAccessException {
+        return jdbcTemplate.query(PROPERTY_GROUP_GET, GroupRowMapper.allTableColumns);
     }
 
     @Override
-    public void update(Group group) throws DAOException {
+    public void update(Group group) {
         jdbcTemplate.update(PROPERTY_GROUP_UPDATE, group.getName(), group.getId());
     }
 
     @Override
-    public void delete(int id) throws DAOException {
+    public void delete(int id) {
         jdbcTemplate.update(PROPERTY_GROUP_DELETE, id);
     }
 
     @Override
-    public List<Group> getGroupsWithLessEqualsStudentCount(int studentCount) throws DAOException, EmptyResultDataAccessException {
-        return jdbcTemplate.query(PROPERTY_GROUP_GET_WITH_CONDITION, (rs, rowNum) -> {
-            Group group = new Group();
-            group.setId(rs.getInt("group_id"));
-            group.setName(rs.getString("group_name"));
-            group.setInscribedStudents(rs.getInt("inscribed_students"));
-            return group;
-        }, studentCount);
+    public List<Group> getGroupsWithLessEqualsStudentCount(int studentCount) throws EmptyResultDataAccessException {
+        return jdbcTemplate.query(PROPERTY_GROUP_GET_WITH_CONDITION, GroupRowMapper.inscribedStudentsTableColumn,
+                studentCount);
     }
 
 }

@@ -2,12 +2,11 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.CommandLineInterface;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.StudentService;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Student;
 
 @Component
 public class StudentMenuItem extends CommandLineInterface implements Item {
@@ -34,8 +33,13 @@ public class StudentMenuItem extends CommandLineInterface implements Item {
     private static final String STUDENT_FORMAT = " %6s | %-10s | %-10s %n";
     private static final String STUDENT_OUT_FORMAT = " %6d | %-10s | %-10s %n";
 
-    @Autowired
     private StudentService studentService;
+    private final String itemName;
+    
+    public StudentMenuItem(StudentService studentService) {
+        this.studentService = studentService;
+        itemName = "Student";
+    }
 
     @Override
     public void draw() {
@@ -53,6 +57,11 @@ public class StudentMenuItem extends CommandLineInterface implements Item {
         } else if (choice == 5) {
             deleteSection();
         }
+    }
+    
+    @Override
+    public String getName() {
+        return String.valueOf(itemName);
     }
 
     private void addSection() {

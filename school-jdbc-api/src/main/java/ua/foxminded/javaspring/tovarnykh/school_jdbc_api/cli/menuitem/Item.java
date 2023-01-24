@@ -4,4 +4,6 @@ public interface Item {
 
     public void draw();
 
+    public String getName();
+
 }

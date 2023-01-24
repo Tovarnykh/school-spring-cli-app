@@ -3,22 +3,17 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.jdbc;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.CourseDao;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Course;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.exception.DAOException;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.rawmapper.CourseRowMapper;
 
 @Repository
 public class JdbcCourseDao implements CourseDao {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     private static final String PROPERTY_COURSE_ADD = "INSERT INTO courses (course_name, course_description) VALUES (?, ?)";
     private static final String PROPERTY_COURSE_GET_WHERE = "SELECT course_id, course_name, course_description FROM courses WHERE course_id = (?)";
@@ -31,17 +26,14 @@ public class JdbcCourseDao implements CourseDao {
             WHERE course_id = (?);
             """;
 
-    private RowMapper<Course> rowMapper = (rs, rowNum) -> {
-        Course course = new Course();
+    private JdbcTemplate jdbcTemplate;
 
-        course.setId(rs.getInt("course_id"));
-        course.setName(rs.getString("course_name"));
-        course.setDescription(rs.getString("course_description"));
-        return course;
-    };
+    public JdbcCourseDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
-    public void add(Course course) throws DAOException, EmptyResultDataAccessException {
+    public void add(Course course) throws EmptyResultDataAccessException {
         jdbcTemplate.update(PROPERTY_COURSE_ADD, course.getName(), course.getDescription());
     }
 
@@ -66,22 +58,22 @@ public class JdbcCourseDao implements CourseDao {
     }
 
     @Override
-    public Course read(int id) throws DAOException, EmptyResultDataAccessException {
-        return jdbcTemplate.queryForObject(PROPERTY_COURSE_GET_WHERE, rowMapper, id);
+    public Course read(int id) throws EmptyResultDataAccessException {
+        return jdbcTemplate.queryForObject(PROPERTY_COURSE_GET_WHERE, CourseRowMapper.allTableColums, id);
     }
 
     @Override
-    public List<Course> readAll() throws DAOException, EmptyResultDataAccessException {
-        return jdbcTemplate.query(PROPERTY_COURSE_GET, rowMapper);
+    public List<Course> readAll() throws EmptyResultDataAccessException {
+        return jdbcTemplate.query(PROPERTY_COURSE_GET, CourseRowMapper.allTableColums);
     }
 
     @Override
-    public void update(Course course) throws DAOException {
+    public void update(Course course) {
         jdbcTemplate.update(PROPERTY_COURSE_UPDATE, course.getName(), course.getDescription(), course.getId());
     }
 
     @Override
-    public void delete(int id) throws DAOException {
+    public void delete(int id) {
         jdbcTemplate.update(PROPERTY_COURSE_DELETE, id);
     }
 

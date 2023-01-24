@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
 
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Student;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 
 @Component
 public class StudentGenerator implements Generator<Student> {

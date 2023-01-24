@@ -2,12 +2,11 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.CommandLineInterface;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.GroupService;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity.Group;
 
 @Component
 public class GroupMenuItem extends CommandLineInterface implements Item {
@@ -33,8 +32,13 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
             ╚═════════════════════════════════════════╝
             """;
 
-    @Autowired
     private GroupService groupService;
+    private final String itemName;
+
+    public GroupMenuItem(GroupService groupService) {
+        this.groupService = groupService;
+        itemName = "Group";
+    }
 
     @Override
     public void draw() {
@@ -52,6 +56,11 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
         } else if (choice == 5) {
             getGroups();
         }
+    }
+    
+    @Override
+    public String getName() {
+        return String.valueOf(itemName);
     }
 
     private void addSection() {
@@ -106,9 +115,9 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
                 ╟────────────────────────────────────────╢
                  in:
                  """);
-        
+
         List<Group> groups = groupService.getGroupsWithLessStudents(numberOfStudents);
-        
+
         System.out.printf(" %12s |  %s | %s %n", "id", "name", "inscribed");
         System.out.println();
         if (!groups.isEmpty()) {

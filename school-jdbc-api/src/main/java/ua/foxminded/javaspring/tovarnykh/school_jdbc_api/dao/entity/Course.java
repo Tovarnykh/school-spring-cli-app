@@ -1,4 +1,4 @@
-package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.entity;
+package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity;
 
 public class Course {
 
@@ -9,7 +9,7 @@ public class Course {
     public Course() {
 
     }
-    
+
     public Course(String name) {
         this.name = name;
         this.description = "";
