@@ -2,8 +2,8 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem;
 
 public interface Item {
 
-    public void draw();
+    void draw();
 
-    public String getName();
+    String getName();
 
 }

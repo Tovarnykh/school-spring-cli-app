@@ -9,6 +9,7 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.CourseMenu
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.GroupMenuItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.StudentCourseItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.StudentMenuItem;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.DataGenerator;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.Item;
 
 @Component
@@ -27,28 +28,31 @@ public class Menu extends CommandLineInterface {
     private CourseMenuItem courseMenuItem;
     private GroupMenuItem groupMenuItem;
     private StudentCourseItem studentCourseItem;
-    
-    private Map<Integer, Item> menuItems;
+    private DataGenerator dataGenerator;
 
-    public Menu(StudentMenuItem studentMenuItem,
-            CourseMenuItem courseMenuItem, GroupMenuItem groupMenuItem,
-            StudentCourseItem studentCourseItem) {
+    private Map<Integer, Item> menuItems = new LinkedHashMap<>();
+
+    public Menu(StudentMenuItem studentMenuItem, CourseMenuItem courseMenuItem, GroupMenuItem groupMenuItem,
+            StudentCourseItem studentCourseItem, DataGenerator dataGenerator) {
         this.studentMenuItem = studentMenuItem;
         this.courseMenuItem = courseMenuItem;
         this.groupMenuItem = groupMenuItem;
         this.studentCourseItem = studentCourseItem;
-        this.menuItems = new LinkedHashMap<>();
+        this .dataGenerator = dataGenerator;
+
         populateMenuItems();
     }
 
     public void initMenu() {
+        dataGenerator.populateDatabase();
         String choice = "";
 
         do {
             printMenu();
             try {
                 choice = readLine();
-                if ((choice.chars().allMatch(Character::isDigit)) && (!choice.isEmpty())) {
+                if ((choice.chars()
+                        .allMatch(Character::isDigit)) && (!choice.isEmpty())) {
                     int option = Integer.parseInt(choice);
 
                     menuItems.get(option).draw();
@@ -73,9 +77,7 @@ public class Menu extends CommandLineInterface {
     private void printMenu() {
         System.out.println(MAIN_MENU_HEAD_SECTION);
 
-        menuItems.forEach((index, menuItem) -> {
-            System.out.printf(MENU_FORMAT, index, menuItem.getName() + "Table");
-        });
+        menuItems.forEach((index, menuItem) -> System.out.printf(MENU_FORMAT, index, menuItem.getName() + "Table"));
         System.out.printf(MENU_FORMAT, EXIT, "to Exit");
         System.out.println(MENU_CLOSE_SECTION);
     }
