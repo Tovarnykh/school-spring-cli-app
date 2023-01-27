@@ -18,6 +18,7 @@ public class GroupService {
     private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving group";
     private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding group";
     private static final String MESSAGE_UPDATE_EXCEPTION = "Error: Problem with updating group";
+    private static final String MESSAGE_DELETE_EXCEPTION = "Error: No such group to delete";
 
     private GroupDao groupDao;
     private Generator<Group> generator;
@@ -71,7 +72,12 @@ public class GroupService {
     }
 
     public void delete(int groupId) {
-        groupDao.delete(groupId);
+        try {
+            Group group = groupDao.read(groupId);
+            groupDao.delete(group);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println(MESSAGE_DELETE_EXCEPTION);
+        }
     }
 
     public List<Group> getGroupsWithLessStudents(int numberOfStudents) {

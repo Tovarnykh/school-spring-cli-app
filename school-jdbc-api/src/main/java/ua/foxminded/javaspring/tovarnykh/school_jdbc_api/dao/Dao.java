@@ -17,6 +17,6 @@ public interface Dao<T> {
 
     void update(T entity) throws DataIntegrityViolationException;
 
-    void delete(int id);
+    void delete(T entity) throws EmptyResultDataAccessException;
 
 }

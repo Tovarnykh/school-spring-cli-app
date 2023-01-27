@@ -3,12 +3,11 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.CommandLineInterface;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.CourseService;
 
 @Component
-public class CourseMenuItem extends CommandLineInterface implements Item {
+public class CourseMenuItem extends MenuItem implements Item {
 
     private static final String MENU_ITEM = """
             ╔═════════════════════════════════════════╗
@@ -43,19 +42,7 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
     @Override
     public void draw() {
         System.out.println(MENU_ITEM);
-        int choice = readNumber();
-
-        if (choice == 1) {
-            addSection();
-        } else if (choice == 2) {
-            getSection();
-        } else if (choice == 3) {
-            getAllSection();
-        } else if (choice == 4) {
-            updateSection();
-        } else if (choice == 5) {
-            deleteSection();
-        }
+        chooseOpetion();
     }
 
     @Override
@@ -63,7 +50,7 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         return String.valueOf(itemName);
     }
 
-    private void addSection() {
+    void addSection() {
         System.out.println("Please, enter new course name, then description:");
         String name = readLine();
         String description = readLine();
@@ -71,7 +58,7 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         courseService.add(name, description);
     }
 
-    private void getSection() {
+    void getSection() {
         System.out.println("Please, enter courseId:");
         int courseId = readNumber();
 
@@ -91,7 +78,7 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         closeSection();
     }
 
-    private void getAllSection() {
+    void getAllSection() {
         System.out.print("""
                 ╔════════════════════════════════════════╗
                 ║                Courses                 ║
@@ -109,7 +96,7 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         closeSection();
     }
 
-    private void updateSection() {
+    void updateSection() {
         System.out.println("Please, enter courseId, then course name, course description:");
         int courseId = readNumber();
         String name = readLine();
@@ -118,7 +105,7 @@ public class CourseMenuItem extends CommandLineInterface implements Item {
         courseService.update(courseId, name, description);
     }
 
-    private void deleteSection() {
+    void deleteSection() {
         System.out.println("Please, enter courseId:");
         int courseId = readNumber();
 

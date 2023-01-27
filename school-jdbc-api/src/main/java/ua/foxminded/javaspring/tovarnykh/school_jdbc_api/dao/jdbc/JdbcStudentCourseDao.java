@@ -45,7 +45,7 @@ public class JdbcStudentCourseDao implements StudentCourseDao {
 
     @Override
     public void add(int studentId, int courseId) {
-        jdbcTemplate.update(PROPERTY_STUDENTCOURSE_ADD, studentId, courseId);
+        jdbcTemplate.update(PROPERTY_STUDENTCOURSE_ADD, studentId, studentId);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class JdbcStudentCourseDao implements StudentCourseDao {
                 StudentCourse studentCourse = studentCourses.get(i);
 
                 ps.setInt(1, studentCourse.getStudentId());
-                ps.setInt(2, studentCourse.getCourseID());
+                ps.setInt(2, studentCourse.getCourseId());
             }
 
             @Override

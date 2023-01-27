@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.CourseMenuItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.GroupMenuItem;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.GroupStudentCountItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.StudentCourseItem;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.StudentCourseNameItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.StudentMenuItem;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.DataGenerator;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.Item;
@@ -22,23 +24,28 @@ public class Menu extends CommandLineInterface {
             ║       Choose which Item to Interact     ║
             ╠─────────────────────────────────────────╣""";
     private static final String MENU_FORMAT = "║%5s - %-33s║%n";
-    private static final String EXCEPTION_MESSAGE = "Such command not provided, try agan";
+    private static final String EXCEPTION_MESSAGE = "Input out of scope";
 
     private StudentMenuItem studentMenuItem;
     private CourseMenuItem courseMenuItem;
     private GroupMenuItem groupMenuItem;
     private StudentCourseItem studentCourseItem;
+    private GroupStudentCountItem groupStudentCountItem;
+    private StudentCourseNameItem studentCourseNameItem;
     private DataGenerator dataGenerator;
 
     private Map<Integer, Item> menuItems = new LinkedHashMap<>();
 
     public Menu(StudentMenuItem studentMenuItem, CourseMenuItem courseMenuItem, GroupMenuItem groupMenuItem,
-            StudentCourseItem studentCourseItem, DataGenerator dataGenerator) {
+            StudentCourseItem studentCourseItem, GroupStudentCountItem groupStudentCountItem,
+            StudentCourseNameItem studentCourseNameItem, DataGenerator dataGenerator) {
         this.studentMenuItem = studentMenuItem;
         this.courseMenuItem = courseMenuItem;
         this.groupMenuItem = groupMenuItem;
         this.studentCourseItem = studentCourseItem;
-        this .dataGenerator = dataGenerator;
+        this.groupStudentCountItem = groupStudentCountItem;
+        this.studentCourseNameItem = studentCourseNameItem;
+        this.dataGenerator = dataGenerator;
 
         populateMenuItems();
     }
@@ -51,8 +58,7 @@ public class Menu extends CommandLineInterface {
             printMenu();
             try {
                 choice = readLine();
-                if ((choice.chars()
-                        .allMatch(Character::isDigit)) && (!choice.isEmpty())) {
+                if ((choice.chars().allMatch(Character::isDigit)) && (!choice.isEmpty())) {
                     int option = Integer.parseInt(choice);
 
                     menuItems.get(option).draw();
@@ -72,12 +78,14 @@ public class Menu extends CommandLineInterface {
         menuItems.put(2, studentMenuItem);
         menuItems.put(3, courseMenuItem);
         menuItems.put(4, studentCourseItem);
+        menuItems.put(5, groupStudentCountItem);
+        menuItems.put(6, studentCourseNameItem);
     }
 
     private void printMenu() {
         System.out.println(MAIN_MENU_HEAD_SECTION);
 
-        menuItems.forEach((index, menuItem) -> System.out.printf(MENU_FORMAT, index, menuItem.getName() + "Table"));
+        menuItems.forEach((index, menuItem) -> System.out.printf(MENU_FORMAT, index, menuItem.getName()));
         System.out.printf(MENU_FORMAT, EXIT, "to Exit");
         System.out.println(MENU_CLOSE_SECTION);
     }

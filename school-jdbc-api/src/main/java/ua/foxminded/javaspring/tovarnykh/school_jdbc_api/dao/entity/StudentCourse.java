@@ -5,7 +5,7 @@ import java.util.Objects;
 public class StudentCourse {
 
     private int studentId;
-    private int courseID;
+    private int courseId;
     private String studentFullName;
     private String courseName;
 
@@ -16,15 +16,15 @@ public class StudentCourse {
     public StudentCourse(int studentId, int courseID) {
         super();
         this.studentId = studentId;
-        this.courseID = courseID;
+        this.courseId = courseID;
     }
 
-    public int getCourseID() {
-        return courseID;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseID(int courseID) {
-        this.courseID = courseID;
+    public void setCourseId(int courseID) {
+        this.courseId = courseID;
     }
 
     public int getStudentId() {
@@ -53,7 +53,7 @@ public class StudentCourse {
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseID, studentId);
+        return Objects.hash(courseId, studentId);
     }
 
     @Override
@@ -65,12 +65,12 @@ public class StudentCourse {
         if (getClass() != obj.getClass())
             return false;
         StudentCourse other = (StudentCourse) obj;
-        return courseID == other.courseID && studentId == other.studentId;
+        return courseId == other.courseId && studentId == other.studentId;
     }
 
     @Override
     public String toString() {
-        return "StudentCourse [studentId=" + studentId + ", courseID=" + courseID + "]";
+        return "StudentCourse [studentId=" + studentId + ", courseID=" + courseId + "]";
     }
 
 }

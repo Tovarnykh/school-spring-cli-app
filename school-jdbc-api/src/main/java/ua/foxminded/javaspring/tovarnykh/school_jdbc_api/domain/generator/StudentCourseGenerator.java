@@ -35,7 +35,7 @@ public class StudentCourseGenerator implements Generator<StudentCourse> {
 
                     StudentCourse studentCourse = new StudentCourse();
                     studentCourse.setStudentId(studentId);
-                    studentCourse.setCourseID(numbers.get(iterator.getAndIncrement()));
+                    studentCourse.setCourseId(numbers.get(iterator.getAndIncrement()));
                     studentsCourses.add(studentCourse);
                 }
             });

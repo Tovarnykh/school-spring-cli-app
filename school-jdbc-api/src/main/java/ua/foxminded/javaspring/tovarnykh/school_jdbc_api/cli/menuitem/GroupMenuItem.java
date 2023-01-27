@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.CommandLineInterface;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.GroupService;
 
 @Component
-public class GroupMenuItem extends CommandLineInterface implements Item {
+public class GroupMenuItem extends MenuItem implements Item {
 
     private static final String MENU_ITEM = """
             ╔═════════════════════════════════════════╗
@@ -20,17 +19,17 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
             ║                                         ║
             ║   2 - Get Group                         ║
             ║                                         ║
+            ║   3 - Get All Groups                    ║
+            ║                                         ║
             ║   3 - Update Group                      ║
             ║                                         ║
             ║   4 - Delete Group                      ║
-            ║                                         ║
-            ║   5 - Get Groups with less              ║
-            ║       or equals Students                ║
             ║                                         ║
             ║   other number - to went Back           ║
             ║                                         ║
             ╚═════════════════════════════════════════╝
             """;
+    private static final String GROUP_FORMAT = " %18s | %s %n";
 
     private GroupService groupService;
     private final String itemName;
@@ -43,34 +42,22 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
     @Override
     public void draw() {
         System.out.println(MENU_ITEM);
-        int choice = readNumber();
-
-        if (choice == 1) {
-            addSection();
-        } else if (choice == 2) {
-            getSection();
-        } else if (choice == 3) {
-            updateSection();
-        } else if (choice == 4) {
-            deleteSection();
-        } else if (choice == 5) {
-            getGroups();
-        }
+        chooseOpetion();
     }
-    
+
     @Override
     public String getName() {
         return String.valueOf(itemName);
     }
 
-    private void addSection() {
+    void addSection() {
         System.out.println("Please, enter new group name:");
         String name = readLine();
 
         groupService.add(name);
     }
 
-    private void getSection() {
+    void getSection() {
         System.out.println("Please, enter groupId:");
         int studentId = readNumber();
 
@@ -82,15 +69,33 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
                  """);
         Group group = groupService.get(studentId);
 
-        System.out.printf(" %18s | %s %n", "id", "name");
+        System.out.printf(GROUP_FORMAT, "id", "name");
         System.out.println(DELIMITER);
         if (group.getId() != 0) {
             System.out.printf(" %18d | %s %n", group.getId(), group.getName());
         }
         closeSection();
     }
+    
+    void getAllSection() {
+        System.out.print("""
+                ╔════════════════════════════════════════╗
+                ║                Courses                 ║
+                ╟────────────────────────────────────────╢
+                 """);
+        System.out.printf(GROUP_FORMAT, "Id", "Name");
+        System.out.println(DELIMITER);
 
-    private void updateSection() {
+        List<Group> groups = groupService.getAll();
+
+        groups.forEach(group -> {
+            System.out.printf(GROUP_FORMAT, group.getId(), group.getName());
+        });
+
+        closeSection();
+    }
+
+    void updateSection() {
         System.out.println("Please, enter groupId, then group name:");
         int groupId = readNumber();
         String name = readLine();
@@ -98,35 +103,11 @@ public class GroupMenuItem extends CommandLineInterface implements Item {
         groupService.update(groupId, name);
     }
 
-    private void deleteSection() {
+    void deleteSection() {
         System.out.println("Please, enter groupId:");
         int groupId = readNumber();
 
         groupService.delete(groupId);
-    }
-
-    private void getGroups() {
-        System.out.println("Please, enter number of students to find groups with it`s amount:");
-        int numberOfStudents = readNumber();
-
-        System.out.print("""
-                ╔════════════════════════════════════════╗
-                ║                  Groups                ║
-                ╟────────────────────────────────────────╢
-                 in:
-                 """);
-
-        List<Group> groups = groupService.getGroupsWithLessStudents(numberOfStudents);
-
-        System.out.printf(" %12s |  %s | %s %n", "id", "name", "inscribed");
-        System.out.println();
-        if (!groups.isEmpty()) {
-            groups.forEach(group -> System.out.printf(" %12d | %s | %s %n", 
-                    group.getId(), 
-                    group.getName(),
-                    group.getInscribedStudents()));
-        }
-        closeSection();
     }
 
 }

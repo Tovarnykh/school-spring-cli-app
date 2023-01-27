@@ -64,7 +64,7 @@ public class StudentCourseService {
     }
 
     public void expelStudent(int studentId, int courseId) {
-        studentCourseDao.delete(studentId, courseId);
+            studentCourseDao.delete(studentId, courseId);
     }
 
 }

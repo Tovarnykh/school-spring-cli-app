@@ -18,6 +18,7 @@ public class CourseService {
     private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving course";
     private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding course";
     private static final String MESSAGE_UPDATE_EXCEPTION = "Error: Problem with updating course";
+    private static final String MESSAGE_DELETE_EXCEPTION = "Error: No such course to delete";
 
     private CourseDao courseDao;
     private Generator<Course> generator;
@@ -71,7 +72,12 @@ public class CourseService {
     }
 
     public void delete(int courseId) {
-        courseDao.delete(courseId);
+        try {
+            Course course = courseDao.read(courseId);
+            courseDao.delete(course);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println(MESSAGE_DELETE_EXCEPTION);
+        }
     }
 
 }

@@ -73,8 +73,8 @@ public class JdbcCourseDao implements CourseDao {
     }
 
     @Override
-    public void delete(int id) {
-        jdbcTemplate.update(PROPERTY_COURSE_DELETE, id);
+    public void delete(Course course) {
+        jdbcTemplate.update(PROPERTY_COURSE_DELETE, course.getId());
     }
 
 }

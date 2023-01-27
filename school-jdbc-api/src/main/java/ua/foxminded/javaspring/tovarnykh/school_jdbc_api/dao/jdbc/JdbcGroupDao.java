@@ -80,8 +80,8 @@ public class JdbcGroupDao implements GroupDao {
     }
 
     @Override
-    public void delete(int id) {
-        jdbcTemplate.update(PROPERTY_GROUP_DELETE, id);
+    public void delete(Group group) {
+        jdbcTemplate.update(PROPERTY_GROUP_DELETE, group.getId());
     }
 
     @Override

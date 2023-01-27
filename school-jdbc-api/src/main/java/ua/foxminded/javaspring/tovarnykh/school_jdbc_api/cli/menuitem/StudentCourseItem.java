@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.CommandLineInterface;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.StudentCourse;
-import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.CourseService;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.StudentCourseService;
 
 @Component
@@ -23,9 +20,7 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
             ║                                         ║
             ║   2 - Print all enrolled students       ║
             ║                                         ║
-            ║   3 - Get Students By Course Name       ║
-            ║                                         ║
-            ║   4 - Expel Student                     ║
+            ║   3 - Expel Student                     ║
             ║                                         ║
             ║   other number - to went Back           ║
             ║                                         ║
@@ -38,13 +33,12 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
             """;
     private static final String STUDENT_COURSE_FORMAT = " %-19s | %5s %n";
 
-    private StudentCourseService studentCourseService;
-    private CourseService courseService;
     private final String itemName;
+    
+    private StudentCourseService studentCourseService;
 
-    public StudentCourseItem(StudentCourseService studentCourseService, CourseService courseService) {
+    public StudentCourseItem(StudentCourseService studentCourseService) {
         this.studentCourseService = studentCourseService;
-        this.courseService = courseService;
         itemName = "StudentCourse";
     }
 
@@ -58,8 +52,6 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
         } else if (choice == 2) {
             getAllEnrolledStudents();
         } else if (choice == 3) {
-            getStudentsByCourseName();
-        } else if (choice == 4) {
             expelSection();
         }
     }
@@ -86,28 +78,6 @@ public class StudentCourseItem extends CommandLineInterface implements Item {
         if (!studentCourses.isEmpty()) {
             studentCourses.forEach(entrolledStudent -> System.out.printf(STUDENT_COURSE_FORMAT,
                     entrolledStudent.getStudentFullName(), entrolledStudent.getCourseName()));
-        }
-        closeSection();
-    }
-
-    private void getStudentsByCourseName() {
-        System.out.println("Please, select course from folowing:");
-        List<Course> courses = courseService.getAll();
-
-        courses.forEach(course -> {
-            System.out.println(course.getName());
-        });
-
-        String courseName = readLine();
-
-        System.out.print(STUDENTS_HEAD_SECTION);
-        List<Student> students = studentCourseService.getStudentsByCourseName(courseName);
-
-        System.out.printf(STUDENT_COURSE_FORMAT, "groupId", "Full Name");
-        System.out.println(DELIMITER);
-        if (!students.isEmpty()) {
-            students.forEach(student -> System.out.printf(STUDENT_COURSE_FORMAT, student.getGroupId(),
-                    student.getFirstName()+ " " + student.getLastName()));
         }
         closeSection();
     }

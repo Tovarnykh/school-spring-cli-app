@@ -77,8 +77,8 @@ public class JdbcStudentDao implements StudentDao {
     }
 
     @Override
-    public void delete(int studentId) {
-        jdbcTemplate.update(PROPERTY_STUDENT_DELETE, studentId);
+    public void delete(Student student) {
+        jdbcTemplate.update(PROPERTY_STUDENT_DELETE, student.getId());
     }
 
 }
