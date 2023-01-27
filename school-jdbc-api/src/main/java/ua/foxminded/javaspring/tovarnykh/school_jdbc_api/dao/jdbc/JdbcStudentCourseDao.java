@@ -7,14 +7,13 @@ import java.util.List;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
+import org.springframework.stereotype.Component;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.StudentCourseDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.StudentCourse;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.rawmapper.StudentCourseRowMapper;
 
-@Repository
+@Component
 public class JdbcStudentCourseDao implements StudentCourseDao {
 
     private static final String PROPERTY_STUDENTCOURSE_ADD = "INSERT INTO students_courses(student_id, course_id) VALUES (?,?);";

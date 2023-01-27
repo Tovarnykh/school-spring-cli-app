@@ -1,7 +1,7 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity;
 
 public class Course {
-
+    
     private int id;
     private String name;
     private String description;

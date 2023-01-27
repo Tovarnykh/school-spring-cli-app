@@ -7,13 +7,12 @@ import java.util.List;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-
+import org.springframework.stereotype.Component;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.GroupDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.rawmapper.GroupRowMapper;
 
-@Repository
+@Component
 public class JdbcGroupDao implements GroupDao {
 
     private static final String PROPERTY_GROUP_ADD = "INSERT INTO groups (group_name) VALUES (?)";

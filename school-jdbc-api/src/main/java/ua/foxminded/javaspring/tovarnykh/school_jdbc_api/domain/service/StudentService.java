@@ -19,6 +19,7 @@ public class StudentService {
     private static final String MESSAGE_GET_EXCEPTION = "Error: Problem with receiving student";
     private static final String MESSAGE_ADD_EXCEPTION = "Error: Problem with adding studet";
     private static final String MESSAGE_UPDATE_EXCEPTION = "Error: Problem with updating student";
+    private static final String MESSAGE_DELETE_EXCEPTION = "Error: No such student to delete";
 
     private StudentDao studentDao;
     private Generator<Student> generator;
@@ -72,7 +73,12 @@ public class StudentService {
     }
 
     public void delete(int studentId) {
-        studentDao.delete(studentId);
+        try {
+            Student student = studentDao.read(studentId);
+            studentDao.delete(student);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println(MESSAGE_DELETE_EXCEPTION);
+        }
     }
 
 }
