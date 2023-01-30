@@ -17,7 +17,7 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test-containers")
-class JdbcGroupDaoIT {
+class JdbcGroupDaoIntegrationTest {
 
     @Autowired
     private GroupDao groupDao;

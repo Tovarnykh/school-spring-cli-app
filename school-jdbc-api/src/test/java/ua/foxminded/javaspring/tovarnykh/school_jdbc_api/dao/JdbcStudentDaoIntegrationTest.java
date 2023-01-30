@@ -18,7 +18,7 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test-containers")
-class JdbcStudentDaoIT {
+class JdbcStudentDaoIntegrationTest {
 
     @Autowired
     private StudentDao studentDao;
@@ -71,7 +71,7 @@ class JdbcStudentDaoIT {
     @Test
     void update_CheckIsRowUpdated_True() {
         Student testStudent = new Student(1, 1, "Daniel", "Gerbertson");
-        Student testStudent2 = new Student(1, 2, "Theodor", "Adamson");
+        Student testStudent2 = new Student(1, 1, "Theodor", "Adamson");
 
         studentDao.add(testStudent);
 

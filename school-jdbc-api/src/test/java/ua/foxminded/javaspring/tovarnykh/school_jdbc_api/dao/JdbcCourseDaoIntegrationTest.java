@@ -2,7 +2,6 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -17,18 +16,19 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test-containers")
-class JdbcCourseDaoIT {
+class JdbcCourseDaoIntegrationTest {
 
     @Autowired
     private CourseDao courseDao;
-
+    
     @Test
     void add_CheckIsCourseSaved_True() {
         Course testCourse = new Course("Test");
         courseDao.add(testCourse);
 
-        Course courseDb = courseDao.read(1);
-        assertNotNull(courseDb);
+        List<Course> coursesDB = courseDao.readAll();
+        assertNotNull(coursesDB);
+        assertTrue(coursesDB.size() > 0);
     }
 
     @Test
@@ -50,6 +50,7 @@ class JdbcCourseDaoIT {
         Course courseDb = courseDao.read(1);
 
         assertNotNull(courseDb);
+        assertNotNull(courseDb.getName());
     }
 
     @Test

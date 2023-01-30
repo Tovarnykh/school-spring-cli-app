@@ -16,7 +16,7 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test-containers")
-class StudentServiceIT {
+class StudentServiceIntegrationTest {
 
     @Autowired
     private StudentService studentService;
@@ -32,6 +32,7 @@ class StudentServiceIT {
         Student studentDb = studentService.get(1);
 
         assertNotNull(studentDb);
+        assertNotNull(studentDb.getFirstName());
     }
 
     @Test
