@@ -36,7 +36,7 @@ public class GroupMenuItem extends MenuItem implements Item {
 
     public GroupMenuItem(GroupService groupService) {
         this.groupService = groupService;
-        itemName = "Group";
+        this.itemName = "Group";
     }
 
     @Override
@@ -47,7 +47,7 @@ public class GroupMenuItem extends MenuItem implements Item {
 
     @Override
     public String getName() {
-        return String.valueOf(itemName);
+        return itemName;
     }
 
     void addSection() {
@@ -76,7 +76,7 @@ public class GroupMenuItem extends MenuItem implements Item {
         }
         closeSection();
     }
-    
+
     void getAllSection() {
         System.out.print("""
                 ╔════════════════════════════════════════╗
@@ -88,9 +88,9 @@ public class GroupMenuItem extends MenuItem implements Item {
 
         List<Group> groups = groupService.getAll();
 
-        groups.forEach(group -> {
-            System.out.printf(GROUP_FORMAT, group.getId(), group.getName());
-        });
+        groups.forEach(group -> System.out.printf(GROUP_FORMAT, 
+                group.getId(), 
+                group.getName()));
 
         closeSection();
     }

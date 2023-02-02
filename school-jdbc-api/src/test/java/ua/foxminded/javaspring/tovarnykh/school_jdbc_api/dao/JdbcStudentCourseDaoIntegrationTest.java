@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -20,17 +19,18 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service.StudentS
 @ActiveProfiles("test-containers")
 class JdbcStudentCourseDaoIntegrationTest {
 
-    @Autowired
     private GroupService groupService;
-
-    @Autowired
     private StudentService studentService;
-
-    @Autowired
     private CourseService courseService;
-
-    @Autowired
     private StudentCourseDao studentCourseDao;
+
+    JdbcStudentCourseDaoIntegrationTest(GroupService groupService, StudentService studentService,
+            CourseService courseService, StudentCourseDao studentCourseDao) {
+        this.groupService = groupService;
+        this.studentService = studentService;
+        this.courseService = courseService;
+        this.studentCourseDao = studentCourseDao;
+    }
 
     @Test
     void add_CheckIsStudentCourseSaved_True() {
@@ -52,7 +52,7 @@ class JdbcStudentCourseDaoIntegrationTest {
         studentService.add(1, "John", "Johnson");
         courseService.add("Sport", "");
         courseService.add("Chess", "");
-        
+
         List<StudentCourse> list = studentCourseDao.readAll();
 
         assertNotNull(list);

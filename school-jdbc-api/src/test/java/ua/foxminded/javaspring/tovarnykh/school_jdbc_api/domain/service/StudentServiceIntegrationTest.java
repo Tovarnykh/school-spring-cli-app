@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -18,11 +17,13 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 @ActiveProfiles("test-containers")
 class StudentServiceIntegrationTest {
 
-    @Autowired
     private StudentService studentService;
-
-    @Autowired
     private GroupService groupService;
+
+    StudentServiceIntegrationTest(StudentService studentService, GroupService groupService) {
+        this.studentService = studentService;
+        this.groupService = groupService;
+    }
 
     @Test
     void add_CheckIsStudentAdd_True() {

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -18,17 +17,18 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.StudentCours
 @ActiveProfiles("test-containers")
 class StudentCourseServiceIntegrationTest {
 
-    @Autowired
     private GroupService GroupService;
-
-    @Autowired
     private CourseService CourseService;
-
-    @Autowired
     private StudentService studentService;
-
-    @Autowired
     private StudentCourseService studentCourseService;
+
+    StudentCourseServiceIntegrationTest(GroupService GroupService, CourseService CourseService,
+            StudentService studentService, StudentCourseService studentCourseService) {
+        this.GroupService = GroupService;
+        this.CourseService = CourseService;
+        this.studentService = studentService;
+        this.studentCourseService = studentCourseService;
+    }
 
     @Test
     void add_CheckIsStudentCourseCourseAdd_True() {
@@ -42,7 +42,7 @@ class StudentCourseServiceIntegrationTest {
         assertNotNull(studentCoursesDb);
         assertTrue(studentCoursesDb.size() > 0);
     }
-    
+
     @Test
     void getStudentsByCourseName_CanGetStudent_True() {
         GroupService.add("tt-00");

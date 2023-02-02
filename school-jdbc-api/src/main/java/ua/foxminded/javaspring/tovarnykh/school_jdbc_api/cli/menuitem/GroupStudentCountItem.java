@@ -47,7 +47,7 @@ public class GroupStudentCountItem extends CommandLineInterface implements Item 
 
     @Override
     public String getName() {
-        return String.valueOf(itemName);
+        return itemName;
     }
 
 }

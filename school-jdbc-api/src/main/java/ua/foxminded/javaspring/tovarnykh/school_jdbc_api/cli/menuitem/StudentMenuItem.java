@@ -34,7 +34,7 @@ public class StudentMenuItem extends MenuItem implements Item {
 
     private StudentService studentService;
     private final String itemName;
-    
+
     public StudentMenuItem(StudentService studentService) {
         this.studentService = studentService;
         itemName = "Student";
@@ -45,10 +45,10 @@ public class StudentMenuItem extends MenuItem implements Item {
         System.out.println(MENU_ITEM);
         chooseOpetion();
     }
-    
+
     @Override
     public String getName() {
-        return String.valueOf(itemName);
+        return itemName;
     }
 
     void addSection() {
@@ -74,14 +74,11 @@ public class StudentMenuItem extends MenuItem implements Item {
         System.out.printf(STUDENT_FORMAT, "id", "Name", "Second Name");
         System.out.println(DELIMITER);
         if (student.getId() != 0) {
-            System.out.printf(STUDENT_OUT_FORMAT, 
-                    student.getGroupId(), 
-                    student.getFirstName(),
-                    student.getLastName());
+            System.out.printf(STUDENT_OUT_FORMAT, student.getGroupId(), student.getFirstName(), student.getLastName());
         }
         closeSection();
     }
-    
+
     void getAllSection() {
         System.out.print("""
                 ╔════════════════════════════════════════╗
@@ -90,15 +87,13 @@ public class StudentMenuItem extends MenuItem implements Item {
                  """);
         System.out.printf(STUDENT_FORMAT, "id", "Name", "Second Name");
         System.out.println(DELIMITER);
-        
+
         List<Student> students = studentService.getAll();
-        
-        students.forEach(student -> {
-                System.out.printf(STUDENT_OUT_FORMAT, 
-                        student.getGroupId(), 
-                        student.getFirstName(),
-                        student.getLastName());
-        });
+
+        students.forEach(student -> System.out.printf(STUDENT_OUT_FORMAT,
+                student.getGroupId(), 
+                student.getFirstName(),
+                student.getLastName()));
         closeSection();
     }
 

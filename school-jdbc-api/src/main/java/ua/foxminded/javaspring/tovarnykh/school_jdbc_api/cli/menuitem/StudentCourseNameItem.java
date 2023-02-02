@@ -56,7 +56,7 @@ public class StudentCourseNameItem extends CommandLineInterface implements Item 
 
     @Override
     public String getName() {
-        return String.valueOf(itemName);
+        return itemName;
     }
 
 }

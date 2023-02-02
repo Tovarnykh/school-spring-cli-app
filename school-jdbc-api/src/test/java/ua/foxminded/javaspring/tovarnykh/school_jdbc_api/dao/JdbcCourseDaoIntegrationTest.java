@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,8 +17,11 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
 @ActiveProfiles("test-containers")
 class JdbcCourseDaoIntegrationTest {
 
-    @Autowired
     private CourseDao courseDao;
+    
+    JdbcCourseDaoIntegrationTest(CourseDao courseDao) {
+        this.courseDao = courseDao;
+    }
     
     @Test
     void add_CheckIsCourseSaved_True() {

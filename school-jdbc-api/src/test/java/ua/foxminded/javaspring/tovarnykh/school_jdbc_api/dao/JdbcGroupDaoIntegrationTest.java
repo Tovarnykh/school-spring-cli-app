@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,8 +18,11 @@ import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
 @ActiveProfiles("test-containers")
 class JdbcGroupDaoIntegrationTest {
 
-    @Autowired
     private GroupDao groupDao;
+    
+    JdbcGroupDaoIntegrationTest(GroupDao groupDao) {
+        this.groupDao = groupDao;
+    }
 
     @Test
     void add_CheckIsGroupSaved_True() {

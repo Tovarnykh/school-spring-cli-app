@@ -47,7 +47,7 @@ public class CourseMenuItem extends MenuItem implements Item {
 
     @Override
     public String getName() {
-        return String.valueOf(itemName);
+        return itemName;
     }
 
     void addSection() {
@@ -89,9 +89,9 @@ public class CourseMenuItem extends MenuItem implements Item {
 
         List<Course> courses = courseService.getAll();
 
-        courses.forEach(course -> {
-            System.out.printf(COURSE_FORMAT, course.getId(), course.getName());
-        });
+        courses.forEach(course -> System.out.printf(COURSE_FORMAT, 
+                course.getId(), 
+                course.getName()));
 
         closeSection();
     }
