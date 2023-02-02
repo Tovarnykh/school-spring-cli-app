@@ -1,0 +1,12 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+/school-jdbc-api/.classpath
+/school-jdbc-api/.project
+/school-jdbc-api/.mvn/wrapper/maven-wrapper.jar
+/school-jdbc-api/.mvn/wrapper/maven-wrapper.properties
+/school-jdbc-api/.settings/org.eclipse.*
+/school-jdbc-api/.settings/org.springframework.ide.eclipse.prefs
+/school-jdbc-api/mvnw
