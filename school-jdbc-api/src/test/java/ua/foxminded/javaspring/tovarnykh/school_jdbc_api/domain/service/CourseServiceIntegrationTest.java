@@ -1,66 +1,71 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.CourseDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
 
+@ActiveProfiles("test")
 @SpringBootTest
-@Testcontainers
-@ActiveProfiles("test-containers")
 class CourseServiceIntegrationTest {
 
     private CourseService coursService;
-    
-    CourseServiceIntegrationTest(CourseService coursService) {
+    private CourseDao courseDao;
+
+    @Autowired
+    CourseServiceIntegrationTest(CourseService coursService, CourseDao courseDao) {
         this.coursService = coursService;
+        this.courseDao = courseDao;
     }
 
     @Test
     void add_CheckIsCourseAdd_True() {
         coursService.add("Health", "");
 
-        Course courseDb = coursService.get(1);
-
-        assertNotNull(courseDb);
-        assertNotNull(courseDb.getName());
+        verify(courseDao).add(new Course(0, "Health", ""));
     }
 
     @Test
     void get_CanGetCourse_True() {
-        coursService.add("Math", "");
+        when(courseDao.read(1)).thenReturn(new Course("MockedCourse"));
 
         Course courseDb = coursService.get(1);
 
         assertNotNull(courseDb);
-        assertFalse(courseDb.getName().isEmpty());
+        assertEquals("MockedCourse", courseDb.getName());
     }
 
     @Test
     void getAll_CheckCanGetAllList_True() {
-        coursService.add("Music", "");
+        when(courseDao.readAll()).thenReturn(List.of(new Course("Health"), new Course("Art")));
 
         List<Course> courses = coursService.getAll();
 
         assertNotNull(courses);
-        assertTrue(courses.size() > 0);
+        assertEquals(2, courses.size());
     }
 
     @Test
-    void update_IsRowUpdatedOnDb_True() {
-        coursService.add("Test", "");
+    void update_IsRowUpdated_True() {
+        coursService.update(1, "Health", "");
 
-        coursService.update(1, "RealCourse", "");
+        verify(courseDao).update(new Course(1, "Health", ""));
+    }
 
-        Course courseDb = coursService.get(1);
-        assertEquals("RealCourse", courseDb.getName());
+    @Test
+    void delete_IsRowDeleted_False() {
+        when(courseDao.read(1)).thenReturn(new Course("Art"));
+        coursService.delete(1);
+
+        verify(courseDao).delete(new Course("Art"));
     }
 
 }

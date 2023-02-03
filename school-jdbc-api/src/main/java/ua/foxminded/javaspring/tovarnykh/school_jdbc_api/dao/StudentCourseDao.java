@@ -18,6 +18,6 @@ public interface StudentCourseDao {
 
     List<Student> getStudents(String courseName) throws EmptyResultDataAccessException;
 
-    void delete(int studentId, int courseId);
+    void delete(int studentId, int courseId) throws EmptyResultDataAccessException;
 
 }

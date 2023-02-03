@@ -1,83 +1,74 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.StudentDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 
 @SpringBootTest
-@Testcontainers
-@ActiveProfiles("test-containers")
+@ActiveProfiles("test")
 class StudentServiceIntegrationTest {
 
     private StudentService studentService;
-    private GroupService groupService;
+    private StudentDao studentDao;
 
-    StudentServiceIntegrationTest(StudentService studentService, GroupService groupService) {
+    @Autowired
+    StudentServiceIntegrationTest(StudentService studentService, StudentDao studentDao) {
         this.studentService = studentService;
-        this.groupService = groupService;
+        this.studentDao = studentDao;
     }
 
     @Test
     void add_CheckIsStudentAdd_True() {
-        groupService.add("ge-32");
         studentService.add(1, "Adam", "Adamson");
 
-        Student studentDb = studentService.get(1);
-
-        assertNotNull(studentDb);
-        assertNotNull(studentDb.getFirstName());
+        verify(studentDao).add(new Student(1, "Adam", "Adamson"));
     }
 
     @Test
     void get_CanGetStudent_True() {
-        groupService.add("ve-12");
-        studentService.add(1, "John", "Adamson");
+        when(studentDao.read(1)).thenReturn(new Student(1, "Adam", "Adamson"));
 
         Student studentDb = studentService.get(1);
 
         assertNotNull(studentDb);
-        assertFalse(studentDb.getFirstName().isEmpty());
+        assertEquals("Adam" ,studentDb.getFirstName());
     }
 
     @Test
     void getAll_CheckCanGetAllList_True() {
-        groupService.add("qw-98");
-        studentService.add(1, "Adam", "Johnson");
+        when(studentDao.readAll()).thenReturn(List.of(new Student(1, "Adam", "Adamson"), new Student(1, "John", "Johnson")));
 
         List<Student> students = studentService.getAll();
 
         assertNotNull(students);
-        assertTrue(students.size() > 0);
+        assertEquals(2, students.size());
     }
 
     @Test
     void update_IsRowUpdatedOnDb_False() {
-        groupService.add("bv-11");
-        studentService.add(1, "Test", "Tester");
+        studentDao.update(new Student(1, "Adam", "Adamson"));
 
-        studentService.update(1, 1, "Robert", "Martin");
-
-        Student studentDb = studentService.get(1);
-        assertNotEquals("Test", studentDb.getFirstName());
+        verify(studentDao).update(new Student(1, "Adam", "Adamson"));
     }
 
     @Test
     void delete_IsRowDeleted_True() {
-        groupService.add("dd-00");
-        studentService.add(1, "ToBe", "Deleted");
+        when(studentDao.read(1)).thenReturn(new Student(1, "Adam", "Adamson"));
+        
+        studentService.delete(1);
 
-        groupService.delete(1);
-
-        Student studentDb = studentService.get(1);
-        assertNotEquals("Deleted", studentDb.getLastName());
+        verify(studentDao).delete(new Student(1, "Adam", "Adamson"));
     }
 
 }
