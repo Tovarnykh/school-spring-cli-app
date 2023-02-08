@@ -1,38 +1,38 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.IntegrationTest;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.StudentCourseDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.StudentCourse;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class StudentCourseServiceIntegrationTest {
+class StudentCourseServiceIntegrationTest extends IntegrationTest {
 
-    private StudentCourseService studentCourseService;
+    @Mock
     private StudentCourseDao studentCourseDao;
-
-    @Autowired
-    StudentCourseServiceIntegrationTest(StudentCourseService studentCourseService, StudentCourseDao studentCourseDao) {
-        this.studentCourseService = studentCourseService;
-        this.studentCourseDao = studentCourseDao;
-    }
+    
+    @InjectMocks
+    private StudentCourseService studentCourseService;
 
     @Test
     void enrollStudent_CheckIsStudentCourseCourseAdd_True() {
         studentCourseService.enrollStudent(1, 1);
 
-        verify(studentCourseDao).add(1, 1);
+        verify(studentCourseDao, times(1)).add(1, 1);
     }
 
     @Test

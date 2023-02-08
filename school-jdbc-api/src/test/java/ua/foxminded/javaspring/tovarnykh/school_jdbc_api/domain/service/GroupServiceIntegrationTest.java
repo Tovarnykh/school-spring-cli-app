@@ -1,37 +1,34 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.IntegrationTest;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.GroupDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Group;
 
 @SpringBootTest
-@ActiveProfiles("test")
-class GroupServiceIntegrationTest {
-
-    private GroupService groupService;
+class GroupServiceIntegrationTest extends IntegrationTest {
+    
+    @Mock
     private GroupDao groupDao;
-
-    @Autowired
-    GroupServiceIntegrationTest(GroupService groupService, GroupDao groupDao) {
-        this.groupService = groupService;
-        this.groupDao = groupDao;
-    }
+    
+    @InjectMocks
+    private GroupService groupService;
 
     @Test
     void add_CheckIsGroupAdd_True() {
         groupService.add("tt-00");
 
-        verify(groupDao).add(new Group("tt-00"));
+        verify(groupDao, times(1)).add(new Group("tt-00"));
     }
 
     @Test

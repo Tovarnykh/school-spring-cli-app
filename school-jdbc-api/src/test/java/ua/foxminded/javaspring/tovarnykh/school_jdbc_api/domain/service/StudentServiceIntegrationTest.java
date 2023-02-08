@@ -2,37 +2,34 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.IntegrationTest;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.StudentDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Student;
 
 @SpringBootTest
-@ActiveProfiles("test")
-class StudentServiceIntegrationTest {
+class StudentServiceIntegrationTest extends IntegrationTest {
 
-    private StudentService studentService;
+    @Mock
     private StudentDao studentDao;
 
-    @Autowired
-    StudentServiceIntegrationTest(StudentService studentService, StudentDao studentDao) {
-        this.studentService = studentService;
-        this.studentDao = studentDao;
-    }
+    @InjectMocks
+    private StudentService studentService;
 
     @Test
     void add_CheckIsStudentAdd_True() {
         studentService.add(1, "Adam", "Adamson");
 
-        verify(studentDao).add(new Student(1, "Adam", "Adamson"));
+        verify(studentDao, times(1)).add(new Student(1, "Adam", "Adamson"));
     }
 
     @Test

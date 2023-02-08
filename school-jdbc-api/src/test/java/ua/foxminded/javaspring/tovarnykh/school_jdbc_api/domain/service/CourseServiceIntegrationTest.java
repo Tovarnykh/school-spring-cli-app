@@ -1,36 +1,34 @@
 package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.IntegrationTest;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.CourseDao;
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.entity.Course;
 
-@ActiveProfiles("test")
 @SpringBootTest
-class CourseServiceIntegrationTest {
-
-    private CourseService coursService;
+class CourseServiceIntegrationTest extends IntegrationTest {
+    
+    @Mock
     private CourseDao courseDao;
-
-    @Autowired
-    CourseServiceIntegrationTest(CourseService coursService, CourseDao courseDao) {
-        this.coursService = coursService;
-        this.courseDao = courseDao;
-    }
+    
+    @InjectMocks
+    private CourseService coursService;
 
     @Test
     void add_CheckIsCourseAdd_True() {
         coursService.add("Health", "");
 
-        verify(courseDao).add(new Course(0, "Health", ""));
+        verify(courseDao, times(1)).add(new Course(0, "Health", ""));
     }
 
     @Test
