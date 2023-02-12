@@ -17,8 +17,8 @@ According to the program, the developing of this application is consisted of sev
 
 ### How To Run
 
-0. Stop existing pgsql in services;
-1. Run **BASH** command to create database 'docker run --name school -e POSTGRES_USER=fox -e POSTGRES_PASSWORD=foxminded -e POSTGRES_DB=school -p 5432:5432 -d postgres';
+0. Stop existing pgsql process in services;
+1. Run **BASH** command to create database *docker run --name school -e POSTGRES_USER=fox -e POSTGRES_PASSWORD=foxminded -e POSTGRES_DB=school -p 5432:5432 -d postgres*;
 2. Compile applications using this command: './mvnw package'
 3. Launch application 'java -jar school-jdbc-api.jar'
 
@@ -30,7 +30,9 @@ The application includes the following components:
 * IoC (**Spring, SpringBoot**)
 * Unit tests (**JUnit5**)
 * Database versioning (**Flyway**)
-* Waay of interacting with DB (**JDBC API**)
+* Way of interacting with DB (**JDBC API**)
 * DB Tests (**Testcontainers**)
+* Logging (**Log4j2**)
+* AOP
 
-Database management system used for data storage: **Postgres** in runtime and **H2** for tests.
+Database management system used for data storage: **Postgres** in runtime and use **Testcontainer** during tests.
