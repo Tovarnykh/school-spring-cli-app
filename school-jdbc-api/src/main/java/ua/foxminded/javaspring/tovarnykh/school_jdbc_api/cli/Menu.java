@@ -3,6 +3,7 @@ package ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import ua.foxminded.javaspring.tovarnykh.school_jdbc_api.cli.menuitem.CourseMenuItem;
@@ -33,7 +34,6 @@ public class Menu extends CommandLineInterface {
     private GroupStudentCountItem groupStudentCountItem;
     private StudentCourseNameItem studentCourseNameItem;
     private DataGenerator dataGenerator;
-
     private Map<Integer, Item> menuItems = new LinkedHashMap<>();
 
     public Menu(StudentMenuItem studentMenuItem, CourseMenuItem courseMenuItem, GroupMenuItem groupMenuItem,
@@ -46,6 +46,7 @@ public class Menu extends CommandLineInterface {
         this.groupStudentCountItem = groupStudentCountItem;
         this.studentCourseNameItem = studentCourseNameItem;
         this.dataGenerator = dataGenerator;
+        LoggerFactory.getLogger(Menu.class);
 
         populateMenuItems();
     }

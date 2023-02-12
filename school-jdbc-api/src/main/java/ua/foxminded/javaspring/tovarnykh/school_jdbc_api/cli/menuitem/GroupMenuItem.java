@@ -21,9 +21,9 @@ public class GroupMenuItem extends MenuItem implements Item {
             ║                                         ║
             ║   3 - Get All Groups                    ║
             ║                                         ║
-            ║   3 - Update Group                      ║
+            ║   4 - Update Group                      ║
             ║                                         ║
-            ║   4 - Delete Group                      ║
+            ║   5 - Delete Group                      ║
             ║                                         ║
             ║   other number - to went Back           ║
             ║                                         ║
