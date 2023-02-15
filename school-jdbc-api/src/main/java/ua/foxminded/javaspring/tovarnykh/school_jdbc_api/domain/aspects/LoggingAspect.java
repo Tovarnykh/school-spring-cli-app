@@ -15,11 +15,6 @@ public class LoggingAspect {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Before("execution(* ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.*.*(..))")
-    void domainMethodsCallLogging() {
-        logger.info("Database has started");
-    }
-
     @Before("execution(* ua.foxminded.javaspring.tovarnykh.school_jdbc_api.dao.*.*(..))")
     void daoMethodsCallLogging(JoinPoint joinPoint) {
         logger.info("DAO Method | {} | had made request to DB, with arguments: {}", joinPoint, joinPoint.getArgs());
@@ -37,6 +32,16 @@ public class LoggingAspect {
             throwing = "exception")
     void daoMethodsExceptionLogging(JoinPoint joinPoint, Exception exception) {
         logger.error("DAO Method | {} | has thrown an exception: ", joinPoint, exception);
+    }
+    
+    @Before("execution(* ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.generator.*.generate())")
+    void generatingDataLogging(JoinPoint joinPoint) {
+        logger.info("Generator Method | {} | starting to generate data...", joinPoint);
+    }
+    
+    @AfterReturning("execution(* ua.foxminded.javaspring.tovarnykh.school_jdbc_api.domain.generator.*.generate())")
+    void generatingDataAfterLogging(JoinPoint joinPoint) {
+        logger.info("Generator Method | {} | success!", joinPoint);
     }
 
 }

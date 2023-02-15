@@ -10,3 +10,5 @@ target/
 /school-jdbc-api/.settings/org.eclipse.*
 /school-jdbc-api/.settings/org.springframework.ide.eclipse.prefs
 /school-jdbc-api/mvnw
+/school-jdbc-api/.factorypath
+/school-jdbc-api/schoolapp.log
